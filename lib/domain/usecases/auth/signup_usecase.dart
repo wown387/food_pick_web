@@ -9,6 +9,14 @@ class SignupUseCase {
 
   SignupUseCase(this.repository);
 
+  Future<ResponseEntity> requestPasswordReset(email) async {
+    return await repository.requestPasswordReset(email);
+  }
+
+  Future<ResponseEntity> validatePasswordReset(body) async {
+    return await repository.validatePasswordReset(body);
+  }
+
   Future<ResponseEntity> checkEmail(email) async {
     return await repository.checkEmail(email);
   }

@@ -20,8 +20,17 @@ class AuthRepositoryImpl implements AuthRepository {
   });
 
   @override
-  Future<ResponseModel> requestPasswordReset(String email) {
-    return remoteDataSource.requestPasswordReset(email);
+  Future<ResponseEntity> requestPasswordReset(String email) async {
+    final responseModel = await remoteDataSource.requestPasswordReset(email);
+    // repo 에서 엔티티로 가공,
+    return responseModel.toEntity();
+  }
+
+  @override
+  Future<ResponseEntity> validatePasswordReset(body) async {
+    final responseModel = await remoteDataSource.validatePasswordReset(body);
+    // repo 에서 엔티티로 가공,
+    return responseModel.toEntity();
   }
 
   @override

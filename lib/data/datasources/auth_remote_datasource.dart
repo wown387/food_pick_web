@@ -17,6 +17,7 @@ abstract class AuthRemoteDataSource {
   Future<UserModel> guestLogin();
   Future<void> logout();
   Future<ResponseModel> requestPasswordReset(String email);
+  Future<ResponseModel> validatePasswordReset(body);
 }
 
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
@@ -41,6 +42,26 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         Uri.parse('${AppConstants.apiBaseUrl}/v0.1/auth/password/request'),
         // Uri.parse('https://dev-food-recommendation-api.jokertrickster.com/v0.1/auth/signin'),
         body: json.encode({'email': email}),
+        headers: {'Content-Type': 'application/json'},
+      );
+      if (response.statusCode == 200) {
+        return ResponseModel.fromJson(json.decode(response.body));
+      } else {
+        return ResponseModel.fromJson(false);
+        // throw ServerException();
+      }
+    } catch (e) {
+      throw Exception('Failed to request password reset');
+    }
+  }
+
+  @override
+  Future<ResponseModel> validatePasswordReset(body) async {
+    try {
+      final response = await client.post(
+        Uri.parse('${AppConstants.apiBaseUrl}/v0.1/auth/password/validate'),
+        // Uri.parse('https://dev-food-recommendation-api.jokertrickster.com/v0.1/auth/signin'),
+        body: json.encode(body),
         headers: {'Content-Type': 'application/json'},
       );
       if (response.statusCode == 200) {
