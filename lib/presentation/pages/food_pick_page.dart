@@ -133,6 +133,12 @@ class _FoodPickScreenState extends State<FoodPickScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocListener<DailyFoodsCubit, DailyFoodsState>(
+      listenWhen: (previous, current) {
+        // 이전 상태가 foodCompatibilityLoaded가 아니고
+        // 현재 상태가 foodCompatibilityLoaded일 때만 true를 반환
+        return previous is! foodCompatibilityLoaded &&
+            current is foodCompatibilityLoaded;
+      },
       listener: (context, state) {
         if (state is foodCompatibilityLoaded) {
           showSelectedTastes("${state.foodCompatibility?.foodCompatibility}");
@@ -285,17 +291,29 @@ class _FoodPickScreenState extends State<FoodPickScreen> {
                           SizedBox(height: 16),
                           // _buildFoodCategorySection(
                           //     "테마별", state.metaData.themes),
-                          _buildFoodCategorySection(
-                              "맛별", state.metaData!.flavors),
-                          _buildFoodCategorySection(
-                              "기본/테마별", state.metaData!.themes),
-                          _buildFoodCategorySection(
-                              "시나리오", state.metaData!.scenarios),
+                          Row(
+                            children: [],
+                          ),
 
-                          _buildFoodCategorySection(
-                              "시간별", state.metaData!.times),
-                          _buildFoodCategorySection(
-                              "종류별", state.metaData!.types),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              _buildFoodCategorySection(
+                                  "맛별", state.metaData!.flavors),
+                              _buildFoodCategorySection(
+                                  "기본/테마별", state.metaData!.themes),
+                              _buildFoodCategorySection(
+                                  "시나리오", state.metaData!.scenarios),
+                              _buildFoodCategorySection(
+                                  "시간별", state.metaData!.times),
+                              _buildFoodCategorySection(
+                                  "종류별", state.metaData!.types),
+                              SizedBox(
+                                width: 10,
+                              ),
+                            ],
+                          ),
+
                           // _buildFoodCategorySection("타입", [
                           //   Food(
                           //       name: "한식",
@@ -529,8 +547,10 @@ class _FoodPickScreenState extends State<FoodPickScreen> {
 
   Widget _buildFoodCategorySection(String title, List<Food> foods) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
+          // mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             Expanded(
               child: Divider(
@@ -557,47 +577,29 @@ class _FoodPickScreenState extends State<FoodPickScreen> {
           ],
         ),
         SizedBox(height: 16),
-        Wrap(
-          spacing: 8,
-          runSpacing: 8,
-          children: foods
-              .map((taste) => TasteCircle(
-                    taste: {
-                      "name": taste.name,
-                      "image": taste.image,
-                      "title": title
-                    },
-                    onTap: () => toggleTaste({
-                      "name": taste.name,
-                      "image": taste.image,
-                      "title": title
-                    }),
-                    isSelected:
-                        selectedTastes.any((t) => t['name'] == taste.name),
-                  ))
-              .toList(),
-
-//           foods.map((food) {
-//             return _buildCategoryImage(
-// // Map<String, String> taste,
-// //       void onTap,
-// //       bool isSelected
-//               food.name as String,
-//               food.image as String,
-//             );
-//           }).toList(),
-          //  [
-
-          //   // _buildCategoryCircle('한식', Colors.lightGreen[100]!),
-          //   // _buildCategoryCircle('중식', Colors.orange[100]!),
-          //   // _buildCategoryCircle('일식', Colors.lightGreen[200]!),
-          //   // _buildCategoryCircle('양식', Colors.orange[200]!),
-          //   // _buildCategoryCircle('베트남 음식', Colors.orange[300]!),
-          //   // _buildCategoryCircle('인도 음식', Colors.orange[100]!),
-          //   // _buildCategoryCircle('패스트 푸드', Colors.red[200]!),
-          //   // _buildCategoryCircle('디저트', Colors.pink[100]!),
-          //   // _buildCategoryCircle('퓨전', Colors.teal[100]!),
-          // ],
+        Column(
+          children: [
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: foods
+                  .map((taste) => TasteCircle(
+                        taste: {
+                          "name": taste.name,
+                          "image": taste.image,
+                          "title": title
+                        },
+                        onTap: () => toggleTaste({
+                          "name": taste.name,
+                          "image": taste.image,
+                          "title": title
+                        }),
+                        isSelected:
+                            selectedTastes.any((t) => t['name'] == taste.name),
+                      ))
+                  .toList(),
+            ),
+          ],
         ),
         SizedBox(height: 16),
       ],

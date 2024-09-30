@@ -201,12 +201,12 @@ class LoginScreen extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    GestureDetector(
-                      child: Text('아이디찾기'),
-                      onTap: () => {print("hello")},
-                    ),
-                    SizedBox(width: 8),
-                    Text('|'),
+                    // GestureDetector(
+                    //   child: Text('아이디찾기'),
+                    //   onTap: () => {print("hello")},
+                    // ),
+                    // SizedBox(width: 8),
+                    // Text('|'),
                     SizedBox(width: 8),
                     GestureDetector(
                       child: Text('비밀번호찾기'),

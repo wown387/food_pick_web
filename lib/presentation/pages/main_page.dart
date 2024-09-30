@@ -230,13 +230,33 @@ class _FoodPickScreenState extends State<FoodPickScreen> {
                   ],
                 ),
                 const SizedBox(height: 40),
-                const Text(
-                  '🏅 랭킹순위 🏅',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image.asset(
+                      'assets/images/ranking_icon.png',
+                      width: 20,
+                      // height: 200,
+                      fit: BoxFit.cover, // BoxFit을 사용하여 이미지 비율 유지하며 잘라냄
+                    ),
+                    const SizedBox(width: 5),
+                    const Text(
+                      '랭킹순위',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(width: 5),
+                    Image.asset(
+                      'assets/images/ranking_icon.png',
+                      width: 20,
+                      // height: 200,
+                      fit: BoxFit.cover, // BoxFit을 사용하여 이미지 비율 유지하며 잘라냄
+                    ),
+                  ],
                 ),
+
                 const SizedBox(height: 20),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -279,7 +299,8 @@ class _FoodPickScreenState extends State<FoodPickScreen> {
                     Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: state.rankedFoods.rankedFoodList
-                            .sublist(5, state.rankedFoods.rankedFoodList?.length)
+                            .sublist(
+                                5, state.rankedFoods.rankedFoodList?.length)
                             .map((food) {
                           return RankingItem(
                             rank: food.rank,

@@ -26,17 +26,6 @@ class _MainLayoutState extends State<MainLayout> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: null,
-      // appBar: AppBar(
-      //     // title: Text('App Title'),
-      //     // actions: [
-      //     //   IconButton(
-      //     //     icon: Icon(Icons.exit_to_app),
-      //     //     onPressed: () {
-      //     //       // 로그아웃 로직
-      //     //     },
-      //     //   ),
-      //     // ],
-      //     ),
       body: SafeArea(
         child: widget.child,
       ),
@@ -74,18 +63,21 @@ class _MainLayoutState extends State<MainLayout> {
                 // MaterialPageRoute(builder: (context) => ProfilePage()),
               );
             } else if (index == 2) {
-              Navigator.push(
-                context,
-                PageRouteBuilder(
-                  pageBuilder: (context, animation, secondaryAnimation) =>
-                      UpdatePage(),
-                  transitionsBuilder:
-                      (context, animation, secondaryAnimation, child) {
-                    return child; // 전환 애니메이션 없이 페이지를 표시합니다.
-                  },
-                ),
-                // MaterialPageRoute(builder: (context) => ProfilePage()),
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text('준비 중입니다.')),
               );
+              // Navigator.push(
+              //   context,
+              //   PageRouteBuilder(
+              //     pageBuilder: (context, animation, secondaryAnimation) =>
+              //         UpdatePage(),
+              //     transitionsBuilder:
+              //         (context, animation, secondaryAnimation, child) {
+              //       return child; // 전환 애니메이션 없이 페이지를 표시합니다.
+              //     },
+              //   ),
+              //   // MaterialPageRoute(builder: (context) => ProfilePage()),
+              // );
             } else if (index == 3) {
               Navigator.push(
                 context,

@@ -77,26 +77,16 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
               style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 16),
-            TextField(
-              controller: _emailController,
-              decoration: const InputDecoration(
-                labelText: '이 메 일',
-                labelStyle: TextStyle(color: Colors.grey),
-                border: UnderlineInputBorder(),
-              ),
-            ),
-            const SizedBox(height: 16),
             Row(
               children: [
                 Expanded(
                   child: TextField(
-                    controller: _codeController,
+                    controller: _emailController,
                     decoration: const InputDecoration(
-                      labelText: '인증코드',
+                      labelText: '이 메 일',
                       labelStyle: TextStyle(color: Colors.grey),
                       border: UnderlineInputBorder(),
                     ),
-                    enabled: isCodeSent, // 인증코드 입력란은 인증코드 요청 후에 활성화
                   ),
                 ),
                 const SizedBox(width: 8),
@@ -112,6 +102,22 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                   child: const Text(
                     '요청하기',
                     style: TextStyle(color: Colors.white),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: _codeController,
+                    decoration: const InputDecoration(
+                      labelText: '인증코드',
+                      labelStyle: TextStyle(color: Colors.grey),
+                      border: UnderlineInputBorder(),
+                    ),
+                    enabled: isCodeSent, // 인증코드 입력란은 인증코드 요청 후에 활성화
                   ),
                 ),
               ],

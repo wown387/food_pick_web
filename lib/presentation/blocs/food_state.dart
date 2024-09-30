@@ -57,6 +57,20 @@ class DailyFoodsLoaded extends DailyFoodsState {
 class SingleRecommendedFoodLoaded extends DailyFoodsState {
   const SingleRecommendedFoodLoaded({
     required Food recommendedFood,
+    required DailyFoods? dailyFoods,
+    required MetadataModel? metaData,
+    RankedFoodListModel? rankedFoods,
+  }) : super(
+          recommendedFood: recommendedFood,
+          dailyFoods: dailyFoods,
+          metaData: metaData,
+          rankedFoods: rankedFoods,
+        );
+}
+
+class foodCompatibilityLoading extends DailyFoodsState {
+  const foodCompatibilityLoading({
+    Food? recommendedFood,
     DailyFoods? dailyFoods,
     MetadataModel? metaData,
     RankedFoodListModel? rankedFoods,

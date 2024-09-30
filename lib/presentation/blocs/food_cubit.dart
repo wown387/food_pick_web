@@ -15,6 +15,12 @@ class DailyFoodsCubit extends Cubit<DailyFoodsState> {
       : super(DailyFoodsInitial());
 
   Future<void> getFoodCompatibility(Map<String, dynamic> body) async {
+    emit(foodCompatibilityLoading(
+      recommendedFood: state.recommendedFood,
+      dailyFoods: state.dailyFoods,
+      metaData: state.metaData,
+      rankedFoods: state.rankedFoods,
+    ));
     try {
       Either<Failure, FoodCompatibility> foodCompatibilityResult =
           await getFoodsDataUseCase.getFoodCompatibility(body);
