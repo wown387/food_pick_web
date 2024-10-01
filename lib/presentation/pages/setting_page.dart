@@ -85,8 +85,13 @@ class SettingsItem extends StatelessWidget {
           onTap: () {
             if (title == "로그아웃") {
               context.read<AuthCubit>().logout();
-            } else {
-              print("hello!!");
+            } else if (title == "의견 보내기") {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return FeedbackModal();
+                },
+              );
               if (url != null) {
                 _launchURL(url!);
               }
@@ -103,23 +108,81 @@ class SettingsItem extends StatelessWidget {
   }
 }
 
-// class SettingsItem extends StatelessWidget {
-//   final String title;
+class FeedbackModal extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final TextEditingController feedbackController = TextEditingController();
 
-//   const SettingsItem({required this.title, super.key});
+    return Dialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(15.0),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              '의견 보내기',
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            SizedBox(height: 20),
+            TextField(
+              controller: feedbackController,
+              maxLines: 5,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: '의견을 입력하세요',
+              ),
+            ),
+            SizedBox(height: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('취소'),
+                ),
+                ElevatedButton(
+                  onPressed: () async {
+                    String feedback = feedbackController.text;
+                    if (feedback.isNotEmpty) {
+                      // 의견 처리 로직 추가 (예: 서버로 전송)
+                      final result = await context
+                          .read<AuthCubit>()
+                          .systemRequestUseCase
+                          .report({"reson": feedback});
+                      print("request report ${result}");
+                      // context[]
+                      //     .read<S>()
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return Column(
-//       children: [
-//         ListTile(
-//           title: Text(title),
-//         ),
-//         const Divider(
-//           height: 1,
-//           color: Colors.grey,
-//         ),
-//       ],
-//     );
-//   }
-// }
+                      Navigator.of(context).pop(); // 모달 닫기
+
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('의견이 성공적으로 전송되었습니다!'),
+                        ),
+                      );
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('의견을 입력해 주세요.'),
+                        ),
+                      );
+                    }
+                  },
+                  child: Text('보내기'),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

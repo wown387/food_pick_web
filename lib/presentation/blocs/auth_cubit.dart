@@ -4,6 +4,7 @@ import 'package:firebase_auth_demo/data/models/user_model.dart';
 import 'package:firebase_auth_demo/domain/usecases/auth/login_usecase.dart';
 import 'package:firebase_auth_demo/domain/usecases/auth/logout_usecase.dart';
 import 'package:firebase_auth_demo/domain/usecases/auth/signup_usecase.dart';
+import 'package:firebase_auth_demo/domain/usecases/system_usecase.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'auth_state.dart';
 
@@ -13,11 +14,13 @@ class AuthCubit extends Cubit<AuthState> {
   final LoginUseCase loginUseCase;
   final LogoutUseCase logoutUseCase;
   final SignupUseCase signupUseCase;
+  final SystemRequestUseCase systemRequestUseCase;
 
   AuthCubit({
     required this.loginUseCase,
     required this.logoutUseCase,
     required this.signupUseCase,
+    required this.systemRequestUseCase,
   }) : super(Unauthenticated());
 
   Future<void> gestLogin() async {

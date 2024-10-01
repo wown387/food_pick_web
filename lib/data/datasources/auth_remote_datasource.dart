@@ -2,7 +2,6 @@ import 'package:firebase_auth_demo/core/constants/app_constants.dart';
 import 'package:firebase_auth_demo/core/errors/exceptions.dart';
 import 'package:firebase_auth_demo/data/models/response_model.dart';
 import 'package:firebase_auth_demo/data/models/user_model.dart';
-import 'package:firebase_auth_demo/domain/entities/auth/response_entity.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 

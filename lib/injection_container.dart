@@ -3,14 +3,18 @@ import 'package:firebase_auth_demo/core/constants/app_constants.dart';
 import 'package:firebase_auth_demo/data/datasources/auth_remote_datasource.dart';
 import 'package:firebase_auth_demo/data/datasources/foods_remote_datasource.dart';
 import 'package:firebase_auth_demo/data/datasources/locals/secure_storage_data_source.dart';
+import 'package:firebase_auth_demo/data/datasources/system_remote_datasource.dart';
 import 'package:firebase_auth_demo/data/repositories/auth_repository_impl.dart';
 import 'package:firebase_auth_demo/data/repositories/food_repository.impl.dart';
+import 'package:firebase_auth_demo/data/repositories/system_repository_impl.dart';
 import 'package:firebase_auth_demo/domain/repositories/auth_repository.dart';
 import 'package:firebase_auth_demo/domain/repositories/food_repository.dart';
+import 'package:firebase_auth_demo/domain/repositories/system_repository.dart';
 import 'package:firebase_auth_demo/domain/usecases/auth/login_usecase.dart';
 import 'package:firebase_auth_demo/domain/usecases/auth/logout_usecase.dart';
 import 'package:firebase_auth_demo/domain/usecases/auth/signup_usecase.dart';
 import 'package:firebase_auth_demo/domain/usecases/food_usecase.dart';
+import 'package:firebase_auth_demo/domain/usecases/system_usecase.dart';
 import 'package:firebase_auth_demo/presentation/blocs/auth_cubit.dart';
 import 'package:firebase_auth_demo/presentation/blocs/food_cubit.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -83,6 +87,12 @@ Future<void> init() async {
       baseUrl: AppConstants.apiBaseUrl,
     ),
   );
+  sl.registerLazySingleton<SystemRemoteDataSource>(
+    () => SystemRemoteDataSourceImpl(
+      client: sl(),
+      baseUrl: AppConstants.apiBaseUrl,
+    ),
+  );
   sl.registerLazySingleton(
       () => SecureStorageDataSource(FlutterSecureStorage()));
 
@@ -95,12 +105,17 @@ Future<void> init() async {
     () => FoodRepositoryImpl(
         remoteDataSource: sl(), secureStorageDataSource: sl()),
   );
+  sl.registerLazySingleton<SystemRepository>(
+    () => SystemRepositoryImpl(
+        remoteDataSource: sl(), secureStorageDataSource: sl()),
+  );
 
   // Use cases
   sl.registerLazySingleton(() => LoginUseCase(sl()));
   sl.registerLazySingleton(() => LogoutUseCase(sl()));
   sl.registerLazySingleton(() => GetFoodDataUseCase(sl()));
   sl.registerLazySingleton(() => SignupUseCase(sl()));
+  sl.registerLazySingleton(() => SystemRequestUseCase(sl()));
 
   // Cubits
   sl.registerFactory(
@@ -108,6 +123,7 @@ Future<void> init() async {
       loginUseCase: sl(),
       logoutUseCase: sl(),
       signupUseCase: sl(),
+      systemRequestUseCase: sl(),
     ),
   );
   sl.registerFactory(
