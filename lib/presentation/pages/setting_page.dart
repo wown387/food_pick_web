@@ -26,9 +26,13 @@ class SettingPage extends StatelessWidget {
           child: Column(
             children: [
               // Text("hello"),
-              SettingsItem(title: '알림 설정'),
-              SettingsItem(title: '공지사항'),
-              SettingsItem(title: '자주 묻는 질문'),
+              // SettingsItem(title: '알림 설정'),
+              SettingsItem(
+                title: '공지사항',
+                url:
+                    "https://parallel-jodhpur-935.notion.site/10d2c71ec7c580adb0acf7b0f2152ed6",
+              ),
+              // SettingsItem(title: '자주 묻는 질문'),
               SettingsItem(title: '의견 보내기'),
               SettingsItem(
                 title: '서비스 이용 약관',

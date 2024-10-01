@@ -1,11 +1,9 @@
 import 'package:firebase_auth_demo/domain/entities/food/food.dart';
-import 'package:firebase_auth_demo/presentation/blocs/auth_cubit.dart';
 import 'package:firebase_auth_demo/presentation/blocs/food_cubit.dart';
 import 'package:firebase_auth_demo/presentation/blocs/food_state.dart';
 import 'package:firebase_auth_demo/presentation/pages/food_pick_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 class MainPage extends StatelessWidget {
@@ -148,16 +146,8 @@ class _FoodPickScreenState extends State<FoodPickScreen> {
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
-    double paddingValue = (screenWidth - 500) / 2;
+    double paddingValue = (screenWidth - 370) / 2;
     return BlocBuilder<DailyFoodsCubit, DailyFoodsState>(
-        //   listener: (context, state) {
-        //   debugPrint(' ${state} main page listener');
-        //   if (state is Unauthenticated) {
-        //     Navigator.of(context).pushReplacement(
-        //       MaterialPageRoute(builder: (_) => LoginPage()),
-        //     );
-        //   }
-        // },
         builder: (context, state) {
       if (state is DailyFoodsLoading) {
         return Center(child: CircularProgressIndicator());
@@ -177,60 +167,12 @@ class _FoodPickScreenState extends State<FoodPickScreen> {
                   ),
                 ),
                 const SizedBox(height: 20),
-                // Text('Welcome, ${state}!'),
-                // ElevatedButton(
-                //   child: Text('Sign Out'),
-                //   onPressed: () => context.read<AuthCubit>().logout(),
-                // ),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: paddingValue),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       DailyFoodsWidget(dailyFoods: state.dailyFoods),
-                      // DailyFoodsWidget(dailyFoods: state.dailyFood,)
-                      // Column(
-                      //   children: [
-                      //     Container(
-                      //       width: 100,
-                      //       height: 100,
-                      //       decoration: BoxDecoration(
-                      //         color: Colors.black,
-                      //         borderRadius: BorderRadius.circular(16),
-                      //       ),
-                      //     ),
-                      //     const SizedBox(height: 8),
-                      //     const Text('비오는날엔\n해물파전', textAlign: TextAlign.center),
-                      //   ],
-                      // ),
-                      // Column(
-                      //   children: [
-                      //     Container(
-                      //       width: 100,
-                      //       height: 100,
-                      //       decoration: BoxDecoration(
-                      //         color: Colors.black,
-                      //         borderRadius: BorderRadius.circular(16),
-                      //       ),
-                      //     ),
-                      //     const SizedBox(height: 8),
-                      //     const Text('복잡한건 싫어\n볶음밥', textAlign: TextAlign.center),
-                      //   ],
-                      // ),
-                      // Column(
-                      //   children: [
-                      //     Container(
-                      //       width: 100,
-                      //       height: 100,
-                      //       decoration: BoxDecoration(
-                      //         color: Colors.black,
-                      //         borderRadius: BorderRadius.circular(16),
-                      //       ),
-                      //     ),
-                      //     const SizedBox(height: 8),
-                      //     const Text('사케와 찰떡궁합\n연어회', textAlign: TextAlign.center),
-                      //   ],
-                      // ),
                     ],
                   ),
                 ),
@@ -261,7 +203,6 @@ class _FoodPickScreenState extends State<FoodPickScreen> {
                     ),
                   ],
                 ),
-
                 const SizedBox(height: 20),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -276,31 +217,7 @@ class _FoodPickScreenState extends State<FoodPickScreen> {
                             name: food.name,
                             change: food.rankChange,
                           );
-                        }).toList()
-                        //  [
-                        // state.rankedFoods.rankedFoodList.map()
-                        // RankingItem(
-                        //     rank: state.rankedFoods.rankedFoodList[0].rank,
-                        //     name: state.rankedFoods.rankedFoodList[0].name,
-                        //     change: state.rankedFoods.rankedFoodList[0].rankChange),
-                        // RankingItem(
-                        //     rank: 2,
-                        //     name: '파전',
-                        //     change: '5↑',
-                        //     changeColor: Colors.red),
-                        // RankingItem(
-                        //     rank: 3,
-                        //     name: '물냉면',
-                        //     change: '1↓',
-                        //     changeColor: Colors.blue),
-                        // RankingItem(rank: 4, name: '스시', change: '-'),
-                        // RankingItem(
-                        //     rank: 5,
-                        //     name: '순대국밥',
-                        //     change: '2↓',
-                        //     changeColor: Colors.blue),
-                        // ],
-                        ),
+                        }).toList()),
                     Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: state.rankedFoods.rankedFoodList
@@ -312,35 +229,7 @@ class _FoodPickScreenState extends State<FoodPickScreen> {
                             name: food.name,
                             change: food.rankChange,
                           );
-                        }).toList()
-                        // const [
-                        // RankingItem(
-                        //     rank: 6,
-                        //     name: '파스타',
-                        //     change: '1↓',
-                        //     changeColor: Colors.blue),
-                        // RankingItem(
-                        //     rank: 7,
-                        //     name: '피자',
-                        //     change: 'NEW',
-                        //     changeColor: Colors.green),
-                        // RankingItem(
-                        //     rank: 8,
-                        //     name: '샐러드',
-                        //     change: '1↑',
-                        //     changeColor: Colors.red),
-                        // RankingItem(
-                        //     rank: 9,
-                        //     name: '샌드위치',
-                        //     change: '2↑',
-                        //     changeColor: Colors.red),
-                        // RankingItem(
-                        //     rank: 10,
-                        //     name: '타코야끼',
-                        //     change: '2↑',
-                        //     changeColor: Colors.red),
-                        // ],
-                        ),
+                        }).toList()),
                   ],
                 ),
                 const Spacer(),
@@ -356,7 +245,6 @@ class _FoodPickScreenState extends State<FoodPickScreen> {
                           return child; // 전환 애니메이션 없이 페이지를 표시합니다.
                         },
                       ),
-                      // MaterialPageRoute(builder: (context) => MainPage()),
                     );
                   },
                   child: Container(

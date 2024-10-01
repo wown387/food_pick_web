@@ -2,7 +2,9 @@ import 'package:firebase_auth_demo/presentation/blocs/auth_cubit.dart';
 import 'package:firebase_auth_demo/presentation/blocs/auth_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
+import 'package:flutter/material.dart';
+import 'package:flutter/gestures.dart';
+import 'package:url_launcher/url_launcher.dart';
 class SignupPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -133,9 +135,45 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
-                      '푸드픽 이용약관 전체동의',
-                      style: TextStyle(fontSize: 14),
+                    // Text(
+                    //   '푸드픽 이용약관 전체동의',
+                    //   style: TextStyle(fontSize: 14),
+                    // ),
+
+                    RichText(
+                      text: TextSpan(
+                        children: [
+                          TextSpan(
+                            text: '푸드픽 이용약관',
+                            style: TextStyle(
+                              color: Colors.blue,
+                              decoration: TextDecoration.underline,
+                              fontSize: 14,
+                            ),
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () async {
+                                final Uri url = Uri.parse(
+                                    'https://parallel-jodhpur-935.notion.site/10d2c71ec7c580adb0acf7b0f2152ed6'); // 실제 이용약관 URL로 변경하세요
+                                if (await canLaunchUrl(url)) {
+                                  await launchUrl(url);
+                                } else {
+                                  // URL을 열 수 없을 때의 에러 처리
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                        content: Text('Could not launch $url')),
+                                  );
+                                }
+                              },
+                          ),
+                          TextSpan(
+                            text: ' 전체동의',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 14,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                     SizedBox(width: 8),
                     Checkbox(

@@ -10,23 +10,7 @@ class FoodPickPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return MainLayout(
         currentIndex: 0, // BottomNavigationBar의 현재 선택된 인덱스 설정
-        child: FoodPickScreen()
-
-        // Column(
-        //   children: [
-        //     // 고정된 위젯
-        //     Container(
-        //       height: 100,
-        //       color: Colors.blue,
-        //       child: Center(child: Text('Fixed Widget')),
-        //     ),
-        //     // 스크롤 가능한 콘텐츠
-        //     Expanded(
-        //       child: FoodPickScreen(),
-        //     ),
-        //   ],
-        // )
-        );
+        child: FoodPickScreen());
   }
 }
 
@@ -37,45 +21,12 @@ class FoodPickScreen extends StatefulWidget {
 
 class _FoodPickScreenState extends State<FoodPickScreen> {
   final ScrollController _scrollController = ScrollController();
-  Map<String, String?> selectedItems = {
-    '상황': null,
-    '시간': null,
-    '메뉴': null,
-  };
+  // Map<String, String?> selectedItems = {
+  //   '상황': null,
+  //   '시간': null,
+  //   '메뉴': null,
+  // };
 
-  // final Set<String> selectedTastes = {};
-
-  // void toggleTaste(String taste) {
-  //   setState(() {
-  //     if (selectedTastes.contains(taste)) {
-  //       selectedTastes.remove(taste);
-  //     } else {
-  //       selectedTastes.add(taste);
-  //     }
-  //   });
-  // }
-
-  // void showSelectedTastes() {
-  //   showDialog(
-  //     context: context,
-  //     builder: (BuildContext context) {
-  //       return AlertDialog(
-  //         title: const Text('선택된 맛'),
-  //         content: Text(selectedTastes.isEmpty
-  //             ? '선택된 맛이 없습니다.'
-  //             : selectedTastes.join(', ')),
-  //         actions: <Widget>[
-  //           TextButton(
-  //             child: const Text('확인'),
-  //             onPressed: () {
-  //               Navigator.of(context).pop();
-  //             },
-  //           ),
-  //         ],
-  //       );
-  //     },
-  //   );
-  // }
   final Set<Map<String, String>> selectedTastes = {};
   void resetTastes() {
     setState(() {
@@ -152,27 +103,33 @@ class _FoodPickScreenState extends State<FoodPickScreen> {
               state is SingleRecommendedFoodLoaded ||
               state is foodCompatibilityLoaded) {
             print("${state.foodCompatibility?.foodCompatibility}");
-
+            print("selectedTastes.isEmpty ${selectedTastes.isEmpty}");
             return Column(
               children: [
                 Expanded(
                   child: SingleChildScrollView(
+                    controller: _scrollController,
                     child: Padding(
                       padding: const EdgeInsets.all(20.0),
                       child: Column(
                         children: [
-                          Text(
-                            "원하는 테마 선택",
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 30,
-                            ),
-                          ),
-                          SizedBox(height: 8),
-                          Text(
-                            '선택에 맞게 메뉴를 찾아드려요',
-                            style: TextStyle(color: Colors.grey, fontSize: 16),
+                          Column(
+                            children: [
+                              Text(
+                                "원하는 테마 선택",
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 30,
+                                ),
+                              ),
+                              SizedBox(height: 8),
+                              Text(
+                                '선택에 맞게 메뉴를 찾아드려요',
+                                style:
+                                    TextStyle(color: Colors.grey, fontSize: 16),
+                              ),
+                            ],
                           ),
                           SizedBox(height: 16),
                           if (state.recommendedFood != null)
@@ -262,7 +219,8 @@ class _FoodPickScreenState extends State<FoodPickScreen> {
                                 ),
                               ],
                             ),
-                          if (state.recommendedFood == null)
+                          if (state.recommendedFood == null &&
+                              selectedTastes.isEmpty==true)
                             Center(
                               child: Container(
                                 width: 300,
@@ -286,14 +244,10 @@ class _FoodPickScreenState extends State<FoodPickScreen> {
                                 ),
                               ),
                             ),
-
                           SizedBox(height: 16),
-                          // _buildFoodCategorySection(
-                          //     "테마별", state.metaData.themes),
                           Row(
                             children: [],
                           ),
-
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
@@ -312,76 +266,6 @@ class _FoodPickScreenState extends State<FoodPickScreen> {
                               ),
                             ],
                           ),
-
-                          // _buildFoodCategorySection("타입", [
-                          //   Food(
-                          //       name: "한식",
-                          //       image:
-                          //           "https://fastly.picsum.photos/id/809/200/300.jpg?hmac=jC-cQrqqx-NPPfMItPjmHx8XKCKi5WRG46ds3qYReKI"),
-                          //   Food(
-                          //       name: "한식",
-                          //       image:
-                          //           "https://fastly.picsum.photos/id/809/200/300.jpg?hmac=jC-cQrqqx-NPPfMItPjmHx8XKCKi5WRG46ds3qYReKI"),
-                          //   Food(
-                          //       name: "한식",
-                          //       image:
-                          //           "https://fastly.picsum.photos/id/809/200/300.jpg?hmac=jC-cQrqqx-NPPfMItPjmHx8XKCKi5WRG46ds3qYReKI"),
-                          //   Food(
-                          //       name: "한식",
-                          //       image:
-                          //           "https://fastly.picsum.photos/id/809/200/300.jpg?hmac=jC-cQrqqx-NPPfMItPjmHx8XKCKi5WRG46ds3qYReKI"),
-                          //   Food(
-                          //       name: "한식",
-                          //       image:
-                          //           "https://fastly.picsum.photos/id/809/200/300.jpg?hmac=jC-cQrqqx-NPPfMItPjmHx8XKCKi5WRG46ds3qYReKI"),
-                          //   Food(
-                          //       name: "한식",
-                          //       image:
-                          //           "https://fastly.picsum.photos/id/809/200/300.jpg?hmac=jC-cQrqqx-NPPfMItPjmHx8XKCKi5WRG46ds3qYReKI"),
-                          //   Food(
-                          //       name: "한식",
-                          //       image:
-                          //           "https://fastly.picsum.photos/id/809/200/300.jpg?hmac=jC-cQrqqx-NPPfMItPjmHx8XKCKi5WRG46ds3qYReKI"),
-                          // ]),
-                          // _buildFoodCategorySection("시간별", [
-                          //   Food(
-                          //       name: "아침",
-                          //       image:
-                          //           "https://fastly.picsum.photos/id/809/200/300.jpg?hmac=jC-cQrqqx-NPPfMItPjmHx8XKCKi5WRG46ds3qYReKI"),
-                          //   Food(
-                          //       name: "점심",
-                          //       image:
-                          //           "https://fastly.picsum.photos/id/809/200/300.jpg?hmac=jC-cQrqqx-NPPfMItPjmHx8XKCKi5WRG46ds3qYReKI"),
-                          //   Food(
-                          //       name: "저녁",
-                          //       image:
-                          //           "https://fastly.picsum.photos/id/809/200/300.jpg?hmac=jC-cQrqqx-NPPfMItPjmHx8XKCKi5WRG46ds3qYReKI"),
-                          // ]),
-
-                          // _buildCategorySection('상황', Colors.orange, [
-                          //   '전체',
-                          //   '혼밥',
-                          //   '친구',
-                          //   '연인',
-                          //   '가족',
-                          //   '회식',
-                          // ]),
-                          // _buildCategorySection('시간', Colors.green, [
-                          //   '전체',
-                          //   '아침',
-                          //   '점심',
-                          //   '저녁',
-                          //   '간식',
-                          //   '야식',
-                          // ]),
-                          // _buildCategorySection('메뉴', Colors.blue, [
-                          //   '전체',
-                          //   '한식',
-                          //   '중식',
-                          //   '양식',
-                          //   '일식',
-                          //   '분식',
-                          // ]),
                         ],
                       ),
                     ),
@@ -390,13 +274,7 @@ class _FoodPickScreenState extends State<FoodPickScreen> {
                 SizedBox(height: 16),
                 ElevatedButton(
                   onPressed: () {
-                    // 선택된 항목들을 보여줌 (로직에 따라 서버에 저장하거나 다른 페이지로 넘길 수 있음)
-                    // print("선택된 항목들: $selectedItems");
-                    // showSelectedTastes();
-                    // context
-                    //     .read<DailyFoodsCubit>()
-                    //     .getSingleRecommendedFood(selectedItems);
-                    // print("selectedItems ${selectedTastes}");
+                    _scrollToTop();
                     context.read<DailyFoodsCubit>().getSingleRecommendedFood({
                       "flavor": "매운맛",
                       "previousAnswer": "김치찌개 떡볶이 치킨",
@@ -405,7 +283,6 @@ class _FoodPickScreenState extends State<FoodPickScreen> {
                       "time": "점심",
                       "type": "한식"
                     });
-                    _scrollToTop();
                     resetTastes();
                   },
                   style: ElevatedButton.styleFrom(
@@ -457,8 +334,8 @@ class _FoodPickScreenState extends State<FoodPickScreen> {
                     ),
                     SizedBox(height: 16),
                     Wrap(
-                      spacing: 16,
-                      runSpacing: 16,
+                      spacing: 10,
+                      runSpacing: 10,
                       children: selectedTastes
                           .map((taste) => ThemeCircle(
                                 imageUrl: taste['image']!,
@@ -583,7 +460,7 @@ class _FoodPickScreenState extends State<FoodPickScreen> {
           children: [
             SizedBox(
               width: 10,
-            ),            
+            ),
             SizedBox(
               width: 10,
             ),
@@ -616,67 +493,6 @@ class _FoodPickScreenState extends State<FoodPickScreen> {
       ],
     );
   }
-
-  Widget _buildCategorySection(String title, Color color, List<String> items) {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 40),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment
-              .spaceBetween, // Column과 Center를 space-between으로 배치
-          children: [
-            Column(
-              children: [
-                SizedBox(width: 16),
-                Icon(Icons.restaurant, color: color),
-                SizedBox(width: 8),
-                Text(
-                  title,
-                  style: TextStyle(color: color, fontSize: 18),
-                ),
-              ],
-            ),
-            Center(
-              child: Container(
-                width: 270,
-                child: Wrap(
-                  children: items
-                      .map((item) => SizedBox(
-                            width: 90,
-                            child: ChoiceChip(
-                              label: Text(
-                                item,
-                                style: TextStyle(
-                                  color: color, // 선택되지 않은 경우 텍스트 색상
-                                  fontSize: 15,
-                                ),
-                              ),
-                              selected: selectedItems[title] == item,
-                              onSelected: (isSelected) {
-                                setState(() {
-                                  if (isSelected) {
-                                    selectedItems[title] = item;
-                                  } else {
-                                    selectedItems[title] = null;
-                                  }
-                                });
-                              },
-                              backgroundColor: Colors.white,
-                              selectedColor: color.withOpacity(0.2),
-                              shape: StadiumBorder(
-                                side: BorderSide(color: color),
-                              ),
-                            ),
-                          ))
-                      .toList(),
-                ),
-              ),
-            )
-          ],
-        ),
-      ),
-    );
-  }
 }
 
 class TasteCircle extends StatelessWidget {
@@ -704,7 +520,7 @@ class TasteCircle extends StatelessWidget {
                 ? const Icon(Icons.check, color: Colors.white)
                 : null,
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 3),
           Text(
             taste['name']!,
             style: TextStyle(fontSize: 11),
@@ -714,32 +530,6 @@ class TasteCircle extends StatelessWidget {
     );
   }
 }
-
-// class TasteCircle extends StatelessWidget {
-//   final String image;
-//   final String label;
-//   final VoidCallback onTap;
-
-//   const TasteCircle(
-//       {required this.image,
-//       required this.label,
-//       required this.onTap,
-//       super.key});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return GestureDetector(
-//       onTap: onTap,
-//       child: Column(
-//         children: [
-//           CircleAvatar(radius: 30, backgroundImage: NetworkImage(image)),
-//           const SizedBox(height: 8),
-//           Text(label),
-//         ],
-//       ),
-//     );
-//   }
-// }
 
 class ThemeCircle extends StatelessWidget {
   final String imageUrl;
@@ -759,7 +549,7 @@ class ThemeCircle extends StatelessWidget {
         Stack(
           children: [
             CircleAvatar(
-              radius: 30,
+              radius: 20,
               backgroundImage: NetworkImage(imageUrl),
             ),
             Positioned(
