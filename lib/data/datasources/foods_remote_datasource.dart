@@ -15,7 +15,7 @@ import 'dart:convert';
 
 abstract class FoodsRemoteDataSource {
   Future<DailyFoods> getDailyFoods();
-  Future<MetadataModel> getMetadata();
+  Future<MetaDataModel> getMetadata();
   Future<List<Food>> getSingleRecommendedFood(
       String accessToken, Map<String, dynamic> body);
   Future<RankedFoodListModel> getRankedFoodList();
@@ -30,14 +30,14 @@ class DailyFoodsRemoteDataSourceImpl implements FoodsRemoteDataSource {
   DailyFoodsRemoteDataSourceImpl({required this.client, required this.baseUrl});
 
   @override
-  Future<MetadataModel> getMetadata() async {
+  Future<MetaDataModel> getMetadata() async {
     final response = await client.get(Uri.parse('${baseUrl}/v0.1/foods/meta'));
     if (response.statusCode == 200) {
       String decodedBody = utf8.decode(response.bodyBytes);
 
       // JSON 파싱
       Map<String, dynamic> jsonMap = json.decode(decodedBody);
-      return MetadataModel.fromJson(jsonMap);
+      return MetaDataModel.fromJson(jsonMap);
     } else {
       throw ServerException();
     }

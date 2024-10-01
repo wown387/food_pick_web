@@ -9,7 +9,7 @@ import 'package:firebase_auth_demo/domain/entities/food/food_compatibility.dart'
 
 abstract class DailyFoodsState extends Equatable {
   final DailyFoods? dailyFoods;
-  final MetadataModel? metaData;
+  final MetaDataModel? metaData;
   final RankedFoodListModel? rankedFoods;
   final Food? recommendedFood;
   final FoodCompatibility? foodCompatibility;
@@ -34,7 +34,7 @@ class DailyFoodsLoading extends DailyFoodsState {}
 // class DailyFoodsLoaded extends DailyFoodsState {
 //   const DailyFoodsLoaded({
 //     required DailyFoods dailyFoods,
-//     required MetadataModel metaData,
+//     required MetaDataModel metaData,
 //     required RankedFoodListModel rankedFoods,
 //   }) : super(
 //           dailyFoods: dailyFoods,
@@ -44,7 +44,7 @@ class DailyFoodsLoading extends DailyFoodsState {}
 // }
 class DailyFoodsLoaded extends DailyFoodsState {
   final DailyFoods dailyFoods;
-  final MetadataModel metaData;
+  final MetaDataModel metaData;
   final RankedFoodListModel rankedFoods;
 
   const DailyFoodsLoaded({
@@ -58,7 +58,7 @@ class SingleRecommendedFoodLoaded extends DailyFoodsState {
   const SingleRecommendedFoodLoaded({
     required Food recommendedFood,
     required DailyFoods? dailyFoods,
-    required MetadataModel? metaData,
+    required MetaDataModel? metaData,
     RankedFoodListModel? rankedFoods,
   }) : super(
           recommendedFood: recommendedFood,
@@ -72,7 +72,7 @@ class foodCompatibilityLoading extends DailyFoodsState {
   const foodCompatibilityLoading({
     Food? recommendedFood,
     DailyFoods? dailyFoods,
-    MetadataModel? metaData,
+    MetaDataModel? metaData,
     RankedFoodListModel? rankedFoods,
   }) : super(
           recommendedFood: recommendedFood,
@@ -87,7 +87,7 @@ class foodCompatibilityLoaded extends DailyFoodsState {
     required FoodCompatibility foodCompatibility,
     Food? recommendedFood,
     DailyFoods? dailyFoods,
-    MetadataModel? metaData,
+    MetaDataModel? metaData,
     RankedFoodListModel? rankedFoods,
   }) : super(
           foodCompatibility: foodCompatibility,

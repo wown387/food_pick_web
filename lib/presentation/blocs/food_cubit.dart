@@ -91,7 +91,7 @@ class DailyFoodsCubit extends Cubit<DailyFoodsState> {
       final rankedFoodListResult =
           await getFoodsDataUseCase.getRankedFoodList();
 
-      Either<Failure, (DailyFoods, MetadataModel, RankedFoodListModel)>
+      Either<Failure, (DailyFoods, MetaDataModel, RankedFoodListModel)>
           combinedResult = dailyFoodsResult.fold(
               (failure) => Left(failure),
               (dailyFoods) => foodMetaResult.fold(

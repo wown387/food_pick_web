@@ -1,3 +1,4 @@
+import 'package:firebase_auth_demo/data/models/food/metadata_model.dart';
 import 'package:firebase_auth_demo/domain/entities/food/food.dart';
 import 'package:firebase_auth_demo/presentation/blocs/food_cubit.dart';
 import 'package:firebase_auth_demo/presentation/blocs/food_state.dart';
@@ -62,7 +63,7 @@ class _FoodPickScreenState extends State<FoodPickScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('선택하신 음식 궁합'),
+          title: const Text('선택하신 음식과의 궁합'),
           content: Text(description),
 
           // Text(selectedTastes.isEmpty
@@ -251,16 +252,18 @@ class _FoodPickScreenState extends State<FoodPickScreen> {
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
+                              // _buildFoodCategorySection(
+                              //     "맛별", state.metaData!.flavors),
                               _buildFoodCategorySection(
-                                  "맛별", state.metaData!.flavors),
+                                  "맛별", state.metaData!.metaData['flavors']!),
+                              _buildFoodCategorySection("기본/테마별",
+                                  state.metaData!.metaData['themes']!),
+                              _buildFoodCategorySection("시나리오",
+                                  state.metaData!.metaData['scenarios']!),
                               _buildFoodCategorySection(
-                                  "기본/테마별", state.metaData!.themes),
+                                  "시간별", state.metaData!.metaData['times']!),
                               _buildFoodCategorySection(
-                                  "시나리오", state.metaData!.scenarios),
-                              _buildFoodCategorySection(
-                                  "시간별", state.metaData!.times),
-                              _buildFoodCategorySection(
-                                  "종류별", state.metaData!.types),
+                                  "종류별", state.metaData!.metaData['types']!),
                               SizedBox(
                                 width: 10,
                               ),
@@ -275,14 +278,16 @@ class _FoodPickScreenState extends State<FoodPickScreen> {
                 ElevatedButton(
                   onPressed: () {
                     _scrollToTop();
-                    context.read<DailyFoodsCubit>().getSingleRecommendedFood({
-                      "flavor": "매운맛",
-                      "previousAnswer": "김치찌개 떡볶이 치킨",
-                      "scenario": "혼밥",
-                      "theme": "스트레스 해소",
-                      "time": "점심",
-                      "type": "한식"
-                    });
+
+                    print(selectedTastes);
+                    // context.read<DailyFoodsCubit>().getSingleRecommendedFood({
+                    //   "flavor": "매운맛",
+                    //   "previousAnswer": "김치찌개 떡볶이 치킨",
+                    //   "scenario": "혼밥",
+                    //   "theme": "스트레스 해소",
+                    //   "time": "점심",
+                    //   "type": "한식"
+                    // });
                     resetTastes();
                   },
                   style: ElevatedButton.styleFrom(
@@ -420,7 +425,7 @@ class _FoodPickScreenState extends State<FoodPickScreen> {
     );
   }
 
-  Widget _buildFoodCategorySection(String title, List<Food> foods) {
+  Widget _buildFoodCategorySection(String title, List<MetaItem> foods) {
     double screenWidth = MediaQuery.of(context).size.width;
     double paddingValue = (screenWidth - 500) / 2;
 
@@ -476,7 +481,7 @@ class _FoodPickScreenState extends State<FoodPickScreen> {
                       taste: {
                         "name": taste.name,
                         "image": taste.image,
-                        "title": title
+                        "title": title,
                       },
                       onTap: () => toggleTaste({
                         "name": taste.name,

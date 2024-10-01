@@ -17,7 +17,7 @@ class GetFoodDataUseCase {
   }
 
   // 특정 음식의 Metadata를 가져오는 메서드
-  Future<Either<Failure, MetadataModel>> getFoodMetadata() async {
+  Future<Either<Failure, MetaDataModel>> getFoodMetadata() async {
     return await repository.getMetadata();
   }
 

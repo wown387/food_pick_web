@@ -7,7 +7,7 @@ import 'package:firebase_auth_demo/domain/entities/food/food_compatibility.dart'
 
 abstract class FoodRepository {
   Future<Either<Failure, DailyFoods>> getDailyFoods();
-  Future<Either<Failure, MetadataModel>> getMetadata();
+  Future<Either<Failure, MetaDataModel>> getMetadata();
   Future<Either<Failure, List<Food>>> getSingleRecommendedFood(
       Map<String, dynamic> body);
   Future<Either<Failure, RankedFoodListModel>> getRankedFoodList();

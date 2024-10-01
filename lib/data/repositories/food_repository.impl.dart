@@ -50,7 +50,7 @@ class FoodRepositoryImpl implements FoodRepository {
   }
 
   @override
-  Future<Either<Failure, MetadataModel>> getMetadata() async {
+  Future<Either<Failure, MetaDataModel>> getMetadata() async {
     try {
       final metadaFoodsData = await remoteDataSource.getMetadata();
       return Right(metadaFoodsData);
