@@ -49,6 +49,14 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
+  Future<ResponseEntity> changeUserProfile(body) async {
+    final token = await secureStorageDataSource.getToken();
+    final responseModel =
+        await remoteDataSource.changeUserProfile('${token}', body);
+    return responseModel.toEntity();
+  }
+
+  @override
   Future<ResponseEntity> checkEmail(email) async {
     final responseModel = await remoteDataSource.checkEmail(email);
     return responseModel.toEntity();

@@ -140,8 +140,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     const Divider(),
                     const SizedBox(height: 16),
                     ElevatedButton(
-                      onPressed: () {
+                      onPressed: () async {
                         // 비밀번호 변경 로직 추가
+                        final result = await context
+                            .read<AuthCubit>()
+                            .signupUseCase
+                            .changePassword({
+                          "newPassword": _newPasswordController.text,
+                          "prevPassword": _currentPasswordController.text,
+                        });
+                        print("checkDuplicate ${result.isSuccess}");
+                        if (result.isSuccess) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text('비밀번호 변경이 완료되었습니다')),
+                          );
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text('비밀번호 변경에 실패하였습니다')),
+                          );
+                        }
                         print('기존 비밀번호: ${_currentPasswordController.text}');
                         print('새로운 비밀번호: ${_newPasswordController.text}');
                         print('비밀번호 재입력: ${_confirmPasswordController.text}');

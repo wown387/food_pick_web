@@ -62,7 +62,7 @@ class _FoodPickScreenState extends State<FoodPickScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          // title: const Text('선택된 맛'),
+          title: const Text('선택하신 음식 궁합'),
           content: Text(description),
 
           // Text(selectedTastes.isEmpty
@@ -220,7 +220,7 @@ class _FoodPickScreenState extends State<FoodPickScreen> {
                               ],
                             ),
                           if (state.recommendedFood == null &&
-                              selectedTastes.isEmpty==true)
+                              selectedTastes.isEmpty == true)
                             Center(
                               child: Container(
                                 width: 300,

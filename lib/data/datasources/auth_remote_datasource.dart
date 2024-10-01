@@ -7,6 +7,7 @@ import 'dart:convert';
 
 abstract class AuthRemoteDataSource {
   Future<ResponseModel> checkEmail(email);
+  Future<ResponseModel> changeUserProfile(String accessToken, body);
   Future<UserModel> signUp(body);
   // Future<UserModel> logInWithGoogle(
   //     GoogleSignInAuthentication googleSignInAuthentication);
@@ -78,6 +79,22 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   Future<ResponseModel> checkEmail(email) async {
     final response = await client.get(Uri.parse(
         '${AppConstants.apiBaseUrl}/v0.1/auth/email/check?email=${email}'));
+    if (response.statusCode == 200) {
+      return ResponseModel.fromJson(json.decode(response.body));
+    } else {
+      return ResponseModel.fromJson(false);
+      // throw ServerException();
+    }
+  }
+
+  @override
+  Future<ResponseModel> changeUserProfile(String accessToken, body) async {
+    final response = await client.put(
+      Uri.parse('${AppConstants.apiBaseUrl}/v0.1/users/profile'),
+      // Uri.parse('https://dev-food-recommendation-api.jokertrickster.com/v0.1/auth/signin'),
+      body: json.encode(body),
+      headers: {'Content-Type': 'application/json', 'tkn': '${accessToken}'},
+    );
     if (response.statusCode == 200) {
       return ResponseModel.fromJson(json.decode(response.body));
     } else {

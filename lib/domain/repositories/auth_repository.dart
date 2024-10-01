@@ -19,4 +19,5 @@ abstract class AuthRepository {
   Future<void> deleteToken();
   Future<ResponseEntity> requestPasswordReset(String email);
   Future<ResponseEntity> validatePasswordReset(body);
+  Future<ResponseEntity> changeUserProfile(body);
 }
