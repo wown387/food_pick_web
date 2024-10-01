@@ -60,7 +60,8 @@ class _TrendingFoodPageState extends State<TrendingFoodPage> {
           ),
         );
       } else {
-        return Center(child: CircularProgressIndicator());
+        return Container();
+        // return Center(child: CircularProgressIndicator());
       }
     });
   }

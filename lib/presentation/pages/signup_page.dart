@@ -6,10 +6,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class SignupPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: EdgeInsets.all(16.0),
           child: SignUpScreen(),
         ),
       ),
@@ -28,6 +28,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController nameController = TextEditingController();
+  bool isChecked = false; // 체크박스 상태를 추적하는 변수
+
   String? selectedYear;
   String? selectedMonth;
   String? selectedDay;
@@ -35,12 +37,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // return
-
-    // BlocBuilder<AuthCubit, AuthState>(
-    //   builder: (context, state) {
-    //   print("signupPage${state}");
-
     return BlocListener<AuthCubit, AuthState>(
       listener: (context, state) {
         print("signup BlocListenerBlocListener ${state}");
@@ -87,8 +83,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   hasButton: true,
                   onDuplicateCheck: () async {
                     // 여기에 중복 확인 로직을 구현합니다.
-                    String username = emailController.text;
-                    bool isDuplicate = await checkDuplicate(username);
+                    String email = emailController.text;
+                    if (email.isEmpty || !emailController.text.contains('@')) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('유효한 이메일을 입력하세요.')),
+                      );
+                      return;
+                    }
+
+                    bool isDuplicate = await checkDuplicate(email);
+
                     if (isDuplicate) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(content: Text('이미 사용 중인 사용자 이름입니다.')),
@@ -128,13 +132,20 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 const SizedBox(height: 70),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
+                  children: [
                     Text(
                       '푸드픽 이용약관 전체동의',
                       style: TextStyle(fontSize: 14),
                     ),
                     SizedBox(width: 8),
-                    Icon(Icons.check_circle, size: 20),
+                    Checkbox(
+                      value: isChecked,
+                      onChanged: (bool? value) {
+                        setState(() {
+                          isChecked = value!;
+                        });
+                      },
+                    ),
                   ],
                 ),
                 const SizedBox(height: 20),
@@ -149,6 +160,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           horizontal: 130, vertical: 15),
                     ),
                     onPressed: () {
+                      bool isValidate = validateSignUpData(context);
+                      if (isValidate == false) {
+                        return;
+                      }
                       _printSignUpData();
                       final body = {
                         "birth": "$selectedYear-$selectedMonth-$selectedDay",
@@ -200,6 +215,52 @@ class _SignUpScreenState extends State<SignUpScreen> {
     print('이름: ${nameController.text}');
     print('생년월일: $selectedYear-$selectedMonth-$selectedDay');
     print('성별: $selectedGender');
+  }
+
+  bool validateSignUpData(BuildContext context) {
+    // Email 검증
+    if (emailController.text.isEmpty || !emailController.text.contains('@')) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('유효한 이메일을 입력하세요.')),
+      );
+      return false;
+    }
+
+    // Name 검증
+    if (nameController.text.isEmpty || nameController.text.length < 2) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('이름은 2글자 이상이어야 합니다.')),
+      );
+      return false;
+    }
+
+    // Password 검증
+    if (passwordController.text.isEmpty || passwordController.text.length < 6) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('비밀번호는 최소 6자 이상이어야 합니다.')),
+      );
+      return false;
+    }
+
+    // 생년월일 검증
+    if (selectedYear == null || selectedMonth == null || selectedDay == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('생년월일을 올바르게 선택하세요.')),
+      );
+      return false;
+    }
+
+    // 성별 검증
+    if (selectedGender == null ||
+        (selectedGender != '남자' && selectedGender != '여자')) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('성별을 올바르게 선택하세요.')),
+      );
+      return false;
+    }
+
+    // 모든 검증 통과
+    return true;
   }
 }
 

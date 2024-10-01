@@ -147,6 +147,8 @@ class _FoodPickScreenState extends State<FoodPickScreen> {
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double paddingValue = (screenWidth - 500) / 2;
     return BlocBuilder<DailyFoodsCubit, DailyFoodsState>(
         //   listener: (context, state) {
         //   debugPrint(' ${state} main page listener');
@@ -180,54 +182,57 @@ class _FoodPickScreenState extends State<FoodPickScreen> {
                 //   child: Text('Sign Out'),
                 //   onPressed: () => context.read<AuthCubit>().logout(),
                 // ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    DailyFoodsWidget(dailyFoods: state.dailyFoods)
-                    // DailyFoodsWidget(dailyFoods: state.dailyFood,)
-                    // Column(
-                    //   children: [
-                    //     Container(
-                    //       width: 100,
-                    //       height: 100,
-                    //       decoration: BoxDecoration(
-                    //         color: Colors.black,
-                    //         borderRadius: BorderRadius.circular(16),
-                    //       ),
-                    //     ),
-                    //     const SizedBox(height: 8),
-                    //     const Text('비오는날엔\n해물파전', textAlign: TextAlign.center),
-                    //   ],
-                    // ),
-                    // Column(
-                    //   children: [
-                    //     Container(
-                    //       width: 100,
-                    //       height: 100,
-                    //       decoration: BoxDecoration(
-                    //         color: Colors.black,
-                    //         borderRadius: BorderRadius.circular(16),
-                    //       ),
-                    //     ),
-                    //     const SizedBox(height: 8),
-                    //     const Text('복잡한건 싫어\n볶음밥', textAlign: TextAlign.center),
-                    //   ],
-                    // ),
-                    // Column(
-                    //   children: [
-                    //     Container(
-                    //       width: 100,
-                    //       height: 100,
-                    //       decoration: BoxDecoration(
-                    //         color: Colors.black,
-                    //         borderRadius: BorderRadius.circular(16),
-                    //       ),
-                    //     ),
-                    //     const SizedBox(height: 8),
-                    //     const Text('사케와 찰떡궁합\n연어회', textAlign: TextAlign.center),
-                    //   ],
-                    // ),
-                  ],
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: paddingValue),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      DailyFoodsWidget(dailyFoods: state.dailyFoods),
+                      // DailyFoodsWidget(dailyFoods: state.dailyFood,)
+                      // Column(
+                      //   children: [
+                      //     Container(
+                      //       width: 100,
+                      //       height: 100,
+                      //       decoration: BoxDecoration(
+                      //         color: Colors.black,
+                      //         borderRadius: BorderRadius.circular(16),
+                      //       ),
+                      //     ),
+                      //     const SizedBox(height: 8),
+                      //     const Text('비오는날엔\n해물파전', textAlign: TextAlign.center),
+                      //   ],
+                      // ),
+                      // Column(
+                      //   children: [
+                      //     Container(
+                      //       width: 100,
+                      //       height: 100,
+                      //       decoration: BoxDecoration(
+                      //         color: Colors.black,
+                      //         borderRadius: BorderRadius.circular(16),
+                      //       ),
+                      //     ),
+                      //     const SizedBox(height: 8),
+                      //     const Text('복잡한건 싫어\n볶음밥', textAlign: TextAlign.center),
+                      //   ],
+                      // ),
+                      // Column(
+                      //   children: [
+                      //     Container(
+                      //       width: 100,
+                      //       height: 100,
+                      //       decoration: BoxDecoration(
+                      //         color: Colors.black,
+                      //         borderRadius: BorderRadius.circular(16),
+                      //       ),
+                      //     ),
+                      //     const SizedBox(height: 8),
+                      //     const Text('사케와 찰떡궁합\n연어회', textAlign: TextAlign.center),
+                      //   ],
+                      // ),
+                    ],
+                  ),
                 ),
                 const SizedBox(height: 40),
                 Row(

@@ -111,7 +111,7 @@ class _FoodPickScreenState extends State<FoodPickScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('선택된 맛'),
+          // title: const Text('선택된 맛'),
           content: Text(description),
 
           // Text(selectedTastes.isEmpty
@@ -262,7 +262,6 @@ class _FoodPickScreenState extends State<FoodPickScreen> {
                                 ),
                               ],
                             ),
-
                           if (state.recommendedFood == null)
                             Center(
                               child: Container(
@@ -530,7 +529,6 @@ class _FoodPickScreenState extends State<FoodPickScreen> {
         CircleAvatar(
           radius: 30,
           backgroundImage: NetworkImage(image),
-
           // backgroundColor: color,
         ),
         SizedBox(height: 4),
@@ -546,6 +544,9 @@ class _FoodPickScreenState extends State<FoodPickScreen> {
   }
 
   Widget _buildFoodCategorySection(String title, List<Food> foods) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double paddingValue = (screenWidth - 500) / 2;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -577,29 +578,39 @@ class _FoodPickScreenState extends State<FoodPickScreen> {
           ],
         ),
         SizedBox(height: 16),
-        Column(
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Wrap(
-              spacing: 8,
-              runSpacing: 8,
-              children: foods
-                  .map((taste) => TasteCircle(
-                        taste: {
-                          "name": taste.name,
-                          "image": taste.image,
-                          "title": title
-                        },
-                        onTap: () => toggleTaste({
-                          "name": taste.name,
-                          "image": taste.image,
-                          "title": title
-                        }),
-                        isSelected:
-                            selectedTastes.any((t) => t['name'] == taste.name),
-                      ))
-                  .toList(),
+            SizedBox(
+              width: 10,
+            ),            
+            SizedBox(
+              width: 10,
             ),
           ],
+        ),
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: paddingValue),
+          child: Wrap(
+            spacing: 20,
+            runSpacing: 8,
+            children: foods
+                .map((taste) => TasteCircle(
+                      taste: {
+                        "name": taste.name,
+                        "image": taste.image,
+                        "title": title
+                      },
+                      onTap: () => toggleTaste({
+                        "name": taste.name,
+                        "image": taste.image,
+                        "title": title
+                      }),
+                      isSelected:
+                          selectedTastes.any((t) => t['name'] == taste.name),
+                    ))
+                .toList(),
+          ),
         ),
         SizedBox(height: 16),
       ],
