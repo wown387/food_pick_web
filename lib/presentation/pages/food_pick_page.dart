@@ -186,14 +186,6 @@ class _FoodPickScreenState extends State<FoodPickScreen> {
                                           ...object1,
                                           ...object2,
                                         };
-                                        // final object = {
-                                        //   "flavor": "매운맛",
-                                        //   "name": state.recommendedFood!.name,
-                                        //   "scenario": "혼밥",
-                                        //   "theme": "스트레스 해소",
-                                        //   "time": "점심",
-                                        //   "type": "한식"
-                                        // };
                                         print("mergedObject ${mergedObject}");
                                         context
                                             .read<DailyFoodsCubit>()
@@ -258,27 +250,6 @@ class _FoodPickScreenState extends State<FoodPickScreen> {
                                 return _buildFoodCategorySection(metaKey,
                                     state.metaData!.metaData['${metaKey}']!);
                               }).toList()),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              // _buildFoodCategorySection(
-                              //     "맛별", state.metaData!.flavors),
-
-                              // _buildFoodCategorySection(
-                              //     "맛별", state.metaData!.metaData['flavors']!),
-                              // _buildFoodCategorySection("기본/테마별",
-                              //     state.metaData!.metaData['themes']!),
-                              // _buildFoodCategorySection("시나리오",
-                              //     state.metaData!.metaData['scenarios']!),
-                              // _buildFoodCategorySection(
-                              //     "시간별", state.metaData!.metaData['times']!),
-                              // _buildFoodCategorySection(
-                              //     "종류별", state.metaData!.metaData['types']!),
-                              SizedBox(
-                                width: 10,
-                              ),
-                            ],
-                          ),
                         ],
                       ),
                     ),
@@ -353,23 +324,6 @@ class _FoodPickScreenState extends State<FoodPickScreen> {
                                 onRemove: () => toggleTaste(taste),
                               ))
                           .toList(),
-                      // state.metaData.scenarios
-                      //     .map((taste) => TasteCircle(
-                      //           taste: {"name": taste.name, "image": taste.image},
-                      //           onTap: () => toggleTaste(
-                      //               {"name": taste.name, "image": taste.image}),
-                      //           isSelected: selectedTastes
-                      //               .any((t) => t['name'] == taste.name),
-                      //         ))
-                      //     .toList(),
-                      // selectedTastes
-                      //     .map((taste) => ThemeCircle(
-                      //           imageUrl:
-                      //               'https://fastly.picsum.photos/id/809/200/300.jpg?hmac=jC-cQrqqx-NPPfMItPjmHx8XKCKi5WRG46ds3qYReKI',
-                      //           label: taste,
-                      //           onRemove: () => toggleTaste(taste),
-                      //         ))
-                      //     .toList(),
                     ),
                     SizedBox(height: 16),
                   ]),
@@ -380,25 +334,6 @@ class _FoodPickScreenState extends State<FoodPickScreen> {
           }
         },
       ),
-    );
-  }
-
-  Widget _buildCategoryCircle(String text, Color color) {
-    return Column(
-      children: [
-        CircleAvatar(
-          radius: 30,
-          backgroundColor: color,
-        ),
-        SizedBox(height: 4),
-        Text(
-          text,
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 12,
-          ),
-        ),
-      ],
     );
   }
 
@@ -422,7 +357,7 @@ class _FoodPickScreenState extends State<FoodPickScreen> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: Text(
-                title, // 중앙 텍스트
+                convertKeywordToKorean(title), // 중앙 텍스트
                 style: TextStyle(
                   fontSize: 14, // 글자 크기
                   fontWeight: FontWeight.bold, // 글자 굵기

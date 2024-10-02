@@ -1,4 +1,5 @@
 import 'package:firebase_auth_demo/presentation/blocs/auth_cubit.dart';
+import 'package:firebase_auth_demo/presentation/blocs/auth_state.dart';
 import 'package:firebase_auth_demo/presentation/layouts/main_layout.dart';
 import 'package:firebase_auth_demo/utils/navigation_util.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -10,47 +11,53 @@ class SettingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     print(context.read<AuthCubit>());
-    return MainLayout(
-      currentIndex: 3, // BottomNavigationBar의 현재 선택된 인덱스 설정
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text(
-            "설정",
-            style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+    return BlocBuilder<AuthCubit, AuthState>(builder: (context, state) {
+      if (state is AuthAuthenticated) {
+        return MainLayout(
+          currentIndex: 3, // BottomNavigationBar의 현재 선택된 인덱스 설정
+          child: Scaffold(
+            appBar: AppBar(
+              title: Text(
+                "설정",
+                style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+              ),
+              // backgroundColor: Colors.white,
+              // elevation: 0,
+            ),
+            body: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                children: [
+                  // Text("hello"),
+                  // SettingsItem(title: '알림 설정'),
+                  SettingsItem(
+                    title: '공지사항',
+                    url:
+                        "https://parallel-jodhpur-935.notion.site/10d2c71ec7c580adb0acf7b0f2152ed6",
+                  ),
+                  // SettingsItem(title: '자주 묻는 질문'),
+                  SettingsItem(title: '의견 보내기'),
+                  SettingsItem(
+                    title: '서비스 이용 약관',
+                    url:
+                        "https://parallel-jodhpur-935.notion.site/10d2c71ec7c580adb0acf7b0f2152ed6",
+                  ),
+                  SettingsItem(
+                    title: '개인정보처리방침',
+                    url:
+                        "https://parallel-jodhpur-935.notion.site/10d2c71ec7c580e1bba8c16dd448a94b",
+                  ),
+                  SettingsItem(title: '버전정보    V24.9.0'),
+                  state.user.id == -1 ? Container() : SettingsItem(title: '로그아웃')
+                ],
+              ),
+            ),
           ),
-          // backgroundColor: Colors.white,
-          // elevation: 0,
-        ),
-        body: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            children: [
-              // Text("hello"),
-              // SettingsItem(title: '알림 설정'),
-              SettingsItem(
-                title: '공지사항',
-                url:
-                    "https://parallel-jodhpur-935.notion.site/10d2c71ec7c580adb0acf7b0f2152ed6",
-              ),
-              // SettingsItem(title: '자주 묻는 질문'),
-              SettingsItem(title: '의견 보내기'),
-              SettingsItem(
-                title: '서비스 이용 약관',
-                url:
-                    "https://parallel-jodhpur-935.notion.site/10d2c71ec7c580adb0acf7b0f2152ed6",
-              ),
-              SettingsItem(
-                title: '개인정보처리방침',
-                url:
-                    "https://parallel-jodhpur-935.notion.site/10d2c71ec7c580e1bba8c16dd448a94b",
-              ),
-              SettingsItem(title: '버전정보    V24.9.0'),
-              SettingsItem(title: '로그아웃')
-            ],
-          ),
-        ),
-      ),
-    );
+        );
+      } else {
+        return Text("page error");
+      }
+    });
   }
 }
 

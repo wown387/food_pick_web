@@ -46,7 +46,7 @@ class UserModel extends User {
   }
   factory UserModel.fromGuestAuthJson(Map<String, dynamic> json) {
     return UserModel(
-      id: 0,
+      id: -1,
       accessToken: json['accessToken'],
       email: json['email'],
       photoUrl: json['photoUrl'],
