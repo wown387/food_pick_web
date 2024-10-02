@@ -1,5 +1,4 @@
 import 'package:firebase_auth_demo/data/models/food/metadata_model.dart';
-import 'package:firebase_auth_demo/domain/entities/food/food.dart';
 import 'package:firebase_auth_demo/presentation/blocs/food_cubit.dart';
 import 'package:firebase_auth_demo/presentation/blocs/food_state.dart';
 import 'package:firebase_auth_demo/presentation/layouts/main_layout.dart';
@@ -179,7 +178,6 @@ class _FoodPickScreenState extends State<FoodPickScreen> {
                                     GestureDetector(
                                       onTap: () {
                                         final object1 = state.selectedFoodType;
-
                                         final object2 = {
                                           "name": state.recommendedFood!.name
                                         };
@@ -188,14 +186,14 @@ class _FoodPickScreenState extends State<FoodPickScreen> {
                                           ...object1,
                                           ...object2,
                                         };
-                                        final object = {
-                                          "flavor": "매운맛",
-                                          "name": state.recommendedFood!.name,
-                                          "scenario": "혼밥",
-                                          "theme": "스트레스 해소",
-                                          "time": "점심",
-                                          "type": "한식"
-                                        };
+                                        // final object = {
+                                        //   "flavor": "매운맛",
+                                        //   "name": state.recommendedFood!.name,
+                                        //   "scenario": "혼밥",
+                                        //   "theme": "스트레스 해소",
+                                        //   "time": "점심",
+                                        //   "type": "한식"
+                                        // };
                                         print("mergedObject ${mergedObject}");
                                         context
                                             .read<DailyFoodsCubit>()
@@ -225,6 +223,7 @@ class _FoodPickScreenState extends State<FoodPickScreen> {
                             ),
                           if (state.recommendedFood == null &&
                               selectedTastes.isEmpty == true)
+                            // if (state.recommendedFood == null )
                             Center(
                               child: Container(
                                 width: 300,
@@ -343,7 +342,7 @@ class _FoodPickScreenState extends State<FoodPickScreen> {
                         ],
                       ),
                     ),
-                    SizedBox(height: 16),
+                    SizedBox(height: 10),
                     Wrap(
                       spacing: 10,
                       runSpacing: 10,
@@ -403,40 +402,13 @@ class _FoodPickScreenState extends State<FoodPickScreen> {
     );
   }
 
-  Widget _buildCategoryImage(String text, String image
-      // Map<String, String> taste,
-      // void onTap,
-      // bool isSelected
-      ) {
-    return Column(
-      children: [
-        // TasteCircle(
-        //     taste: taste,
-        //     isSelected: isSelected,
-        //     onTap: () => toggleTaste(taste)),
-        CircleAvatar(
-          radius: 30,
-          backgroundImage: NetworkImage(image),
-          // backgroundColor: color,
-        ),
-        SizedBox(height: 4),
-        // Text(
-        //   text,
-        //   style: TextStyle(
-        //     color: Colors.black,
-        //     fontSize: 12,
-        //   ),
-        // ),
-      ],
-    );
-  }
-
   Widget _buildFoodCategorySection(String title, List<MetaItem> foods) {
     double screenWidth = MediaQuery.of(context).size.width;
-    double paddingValue = (screenWidth - 500) / 2;
+    double paddingValue = screenWidth < 400 ? 10 : (screenWidth - (400)) / 2;
 
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      // crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Row(
           // mainAxisAlignment: MainAxisAlignment.start,
@@ -480,7 +452,7 @@ class _FoodPickScreenState extends State<FoodPickScreen> {
         Padding(
           padding: EdgeInsets.symmetric(horizontal: paddingValue),
           child: Wrap(
-            spacing: 20,
+            spacing: 10,
             runSpacing: 8,
             children: foods
                 .map((taste) => TasteCircle(
@@ -524,12 +496,32 @@ class TasteCircle extends StatelessWidget {
       onTap: onTap,
       child: Column(
         children: [
+          // CircleAvatar(
+          //   radius: 30,
+          //   backgroundImage: NetworkImage(taste['image']!),
+          //   child: isSelected
+          //       ? const Icon(Icons.check, color: Colors.white)
+          //       : null,
+          // ),
+
           CircleAvatar(
             radius: 30,
             backgroundImage: NetworkImage(taste['image']!),
-            child: isSelected
-                ? const Icon(Icons.check, color: Colors.white)
-                : null,
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                if (isSelected)
+                  Container(
+                    width: 60, // diameter = 2 * radius
+                    height: 60,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.black.withOpacity(0.5), // 반투명한 검은색 오버레이
+                    ),
+                  ),
+                if (isSelected) Icon(Icons.check, color: Colors.white),
+              ],
+            ),
           ),
           const SizedBox(height: 3),
           Text(
@@ -577,8 +569,11 @@ class ThemeCircle extends StatelessWidget {
             ),
           ],
         ),
-        const SizedBox(height: 8),
-        Text(label),
+        const SizedBox(height: 5),
+        Text(
+          label,
+          style: TextStyle(fontSize: 10),
+        ),
       ],
     );
   }

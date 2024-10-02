@@ -95,6 +95,10 @@ class SettingsItem extends StatelessWidget {
               if (url != null) {
                 _launchURL(url!);
               }
+            } else {
+              if (url != null) {
+                _launchURL(url!);
+              }
             }
           },
           trailing: url != null ? Icon(Icons.arrow_forward_ios) : null,
@@ -156,7 +160,7 @@ class FeedbackModal extends StatelessWidget {
                       final result = await context
                           .read<AuthCubit>()
                           .systemRequestUseCase
-                          .report({"reson": feedback});
+                          .report({"reason": feedback});
                       print("request report ${result}");
                       // context[]
                       //     .read<S>()
