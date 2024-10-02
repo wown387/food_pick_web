@@ -71,7 +71,20 @@ class DailyFoodsCubit extends Cubit<DailyFoodsState> {
                 dailyFoods: state.dailyFoods,
                 metaData: state.metaData,
                 rankedFoods: state.rankedFoods,
-                selectedFoodType: body));
+                selectedFoodType: body,
+                // previousAnswer: [
+                //   ...(state.previousAnswer ?? []),
+                //   if (recommendedFoods.isNotEmpty) recommendedFoods[0].name,
+
+                // ]
+                previousAnswer: [
+                  (state?.previousAnswer?.isNotEmpty == true
+                          ? state!.previousAnswer![0] + ' '
+                          : '') +
+                      (recommendedFoods.isNotEmpty
+                          ? recommendedFoods[0].name
+                          : '')
+                ].where((s) => s.isNotEmpty).toList()));
           } else {
             emit(DailyFoodsError('No recommended food found'));
           }

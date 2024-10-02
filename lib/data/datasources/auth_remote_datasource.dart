@@ -9,8 +9,6 @@ abstract class AuthRemoteDataSource {
   Future<ResponseModel> checkEmail(email);
   Future<ResponseModel> changeUserProfile(String accessToken, body);
   Future<UserModel> signUp(body);
-  // Future<UserModel> logInWithGoogle(
-  //     GoogleSignInAuthentication googleSignInAuthentication);
   Future<UserModel> getUserProfile(String accessToken, int userId);
   Future<void> signOut();
   Future<UserModel> login(String username, String password);
@@ -21,26 +19,17 @@ abstract class AuthRemoteDataSource {
 }
 
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
-  // final GoogleSignIn _googleSignIn;
   final http.Client client;
-  // final FirebaseAuth _auth = FirebaseAuth.instance;
 
   AuthRemoteDataSourceImpl({
-    // GoogleSignIn? googleSignIn,
     required this.client,
   });
-  // :
-  //  _googleSignIn = googleSignIn ??
-  //           GoogleSignIn(
-  //               // serverClientId: AppConstants.googleClientId
-  //               );
 
   @override
   Future<ResponseModel> requestPasswordReset(String email) async {
     try {
       final response = await client.post(
         Uri.parse('${AppConstants.apiBaseUrl}/v0.1/auth/password/request'),
-        // Uri.parse('https://dev-food-recommendation-api.jokertrickster.com/v0.1/auth/signin'),
         body: json.encode({'email': email}),
         headers: {'Content-Type': 'application/json'},
       );
@@ -48,7 +37,6 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         return ResponseModel.fromJson(json.decode(response.body));
       } else {
         return ResponseModel.fromJson(false);
-        // throw ServerException();
       }
     } catch (e) {
       throw Exception('Failed to request password reset');
@@ -60,7 +48,6 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     try {
       final response = await client.post(
         Uri.parse('${AppConstants.apiBaseUrl}/v0.1/auth/password/validate'),
-        // Uri.parse('https://dev-food-recommendation-api.jokertrickster.com/v0.1/auth/signin'),
         body: json.encode(body),
         headers: {'Content-Type': 'application/json'},
       );
@@ -68,7 +55,6 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         return ResponseModel.fromJson(json.decode(response.body));
       } else {
         return ResponseModel.fromJson(false);
-        // throw ServerException();
       }
     } catch (e) {
       throw Exception('Failed to request password reset');
@@ -83,7 +69,6 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       return ResponseModel.fromJson(json.decode(response.body));
     } else {
       return ResponseModel.fromJson(false);
-      // throw ServerException();
     }
   }
 
@@ -91,7 +76,6 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   Future<ResponseModel> changeUserProfile(String accessToken, body) async {
     final response = await client.put(
       Uri.parse('${AppConstants.apiBaseUrl}/v0.1/users/profile'),
-      // Uri.parse('https://dev-food-recommendation-api.jokertrickster.com/v0.1/auth/signin'),
       body: json.encode(body),
       headers: {'Content-Type': 'application/json', 'tkn': '${accessToken}'},
     );
@@ -99,7 +83,6 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       return ResponseModel.fromJson(json.decode(response.body));
     } else {
       return ResponseModel.fromJson(false);
-      // throw ServerException();
     }
   }
 
@@ -109,7 +92,6 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     try {
       final response = await client.post(
         Uri.parse('${AppConstants.apiBaseUrl}/v0.1/auth/signup'),
-        // Uri.parse('https://dev-food-recommendation-api.jokertrickster.com/v0.1/auth/signin'),
         body: json.encode(body),
         headers: {'Content-Type': 'application/json'},
       );
@@ -125,7 +107,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   @override
   Future<UserModel> getUserProfile(String accessToken, int userId) async {
     try {
-      print(' getUserProfile ${AppConstants.apiBaseUrl}/v0.1/user/${userId}');
+      print(' getUserProfile ${AppConstants.apiBaseUrl}/v0.1/users/${userId}');
       final response = await client.get(
         Uri.parse('${AppConstants.apiBaseUrl}/v0.1/user/${userId}'),
         headers: {'Content-Type': 'application/json', 'tkn': '${accessToken}'},
@@ -156,12 +138,9 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       print("login remote start ${username} ${password}");
       final response = await client.post(
         Uri.parse('${AppConstants.apiBaseUrl}/v0.1/auth/signin'),
-        // Uri.parse('https://dev-food-recommendation-api.jokertrickster.com/v0.1/auth/signin'),
         body: json.encode({'email': username, 'password': password}),
         headers: {'Content-Type': 'application/json'},
       );
-      print(response.body);
-
       if (response.statusCode == 200) {
         return UserModel.fromAuthJson(json.decode(response.body));
       } else {
@@ -177,7 +156,6 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     try {
       final response = await client.post(
         Uri.parse('${AppConstants.apiBaseUrl}/v0.1/auth/guest'),
-        // Uri.parse('https://dev-food-recommendation-api.jokertrickster.com/v0.1/auth/signin'),
         body: json.encode({}),
         headers: {'Content-Type': 'application/json'},
       );
@@ -196,18 +174,11 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   @override
   Future<void> signOut() async {
     try {
-      // await _googleSignIn.signOut();
-      // Inform your server about the logout
       await client.post(
         Uri.parse('${AppConstants.apiBaseUrl}/logout'),
         headers: {'Content-Type': 'application/json'},
       );
-    }
-
-    // on GoogleSignInException catch (e) {
-    //   throw AuthException('Google Sign Out failed: ${e.message}');
-    // }
-    catch (e) {
+    } catch (e) {
       throw ServerException('Logout failed: ${e.toString()}');
     }
   }

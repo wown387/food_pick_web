@@ -261,10 +261,18 @@ class _FoodPickScreenState extends State<FoodPickScreen> {
                     _scrollToTop();
                     final trnasformedInput = transformData(selectedTastes);
                     print("transform input ${trnasformedInput}");
+                    print("previous answer ${state.previousAnswer}");
+                    final mergedObject = {
+                      ...trnasformedInput,
+                      "previousAnswer": state.previousAnswer == null
+                          ? ""
+                          : state.previousAnswer![0]
+                    };
+                    print("mergedObject ${mergedObject}");
                     context
                         .read<DailyFoodsCubit>()
-                        .getSingleRecommendedFood(trnasformedInput);
-                    resetTastes();
+                        .getSingleRecommendedFood(mergedObject);
+                    // resetTastes();
                   },
                   style: ElevatedButton.styleFrom(
                     primary: Color(0xFFFB9A79),
