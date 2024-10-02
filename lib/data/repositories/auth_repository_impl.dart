@@ -27,6 +27,14 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
+  Future<ResponseEntity> deleteUser() async {
+    final token = await secureStorageDataSource.getToken();
+    final responseModel = await remoteDataSource.deleteUser(token);
+    // repo 에서 엔티티로 가공,
+    return responseModel.toEntity();
+  }
+
+  @override
   Future<ResponseEntity> validatePasswordReset(body) async {
     final responseModel = await remoteDataSource.validatePasswordReset(body);
     // repo 에서 엔티티로 가공,

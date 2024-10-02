@@ -65,6 +65,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         }
       },
       child: Scaffold(
+        appBar: AppBar(),
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24.0),
           child: SingleChildScrollView(
@@ -290,7 +291,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
     // 성별 검증
     if (selectedGender == null ||
-        (selectedGender != '남자' && selectedGender != '여자')) {
+        (selectedGender != 'male' && selectedGender != 'female')) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('성별을 올바르게 선택하세요.')),
       );

@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 abstract class AuthRemoteDataSource {
+  Future<ResponseModel> deleteUser(token);
   Future<ResponseModel> checkEmail(email);
   Future<ResponseModel> changeUserProfile(String accessToken, body);
   Future<UserModel> signUp(body);
@@ -24,6 +25,23 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   AuthRemoteDataSourceImpl({
     required this.client,
   });
+
+  @override
+  Future<ResponseModel> deleteUser(token) async {
+    try {
+      final response = await client.delete(
+        Uri.parse('${AppConstants.apiBaseUrl}/v0.1/users'),
+        headers: {'Content-Type': 'application/json', 'tkn': '${token}'},
+      );
+      if (response.statusCode == 200) {
+        return ResponseModel.fromJson(json.decode(response.body));
+      } else {
+        return ResponseModel.fromJson(false);
+      }
+    } catch (e) {
+      throw Exception('Failed to request password reset');
+    }
+  }
 
   @override
   Future<ResponseModel> requestPasswordReset(String email) async {
@@ -109,7 +127,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     try {
       print(' getUserProfile ${AppConstants.apiBaseUrl}/v0.1/users/${userId}');
       final response = await client.get(
-        Uri.parse('${AppConstants.apiBaseUrl}/v0.1/user/${userId}'),
+        Uri.parse('${AppConstants.apiBaseUrl}/v0.1/users/${userId}'),
         headers: {'Content-Type': 'application/json', 'tkn': '${accessToken}'},
       );
       print(response.statusCode);

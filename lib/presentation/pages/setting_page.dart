@@ -1,3 +1,4 @@
+import 'package:firebase_auth_demo/domain/entities/auth/response_entity.dart';
 import 'package:firebase_auth_demo/presentation/blocs/auth_cubit.dart';
 import 'package:firebase_auth_demo/presentation/blocs/auth_state.dart';
 import 'package:firebase_auth_demo/presentation/layouts/main_layout.dart';
@@ -47,8 +48,13 @@ class SettingPage extends StatelessWidget {
                     url:
                         "https://parallel-jodhpur-935.notion.site/10d2c71ec7c580e1bba8c16dd448a94b",
                   ),
-                  SettingsItem(title: '버전정보    V24.9.0'),
-                  state.user.id == -1 ? Container() : SettingsItem(title: '로그아웃')
+                  SettingsItem(title: '버전정보    V1.0'),
+                  state.user.id == -1
+                      ? Container()
+                      : SettingsItem(title: '로그아웃'),
+                  state.user.id == -1
+                      ? Container()
+                      : SettingsItem(title: '회원 탈퇴'),
                 ],
               ),
             ),
@@ -74,12 +80,6 @@ class SettingsItem extends StatelessWidget {
   Future<void> _launchURL(String url) async {
     final Uri uri = Uri.parse(url);
     html.window.open(url, '_blank'); // 새 창에서 URL 열기
-    // if (!await launchUrl(
-    //   uri,
-    //   mode: LaunchMode.externalApplication,
-    // )) {
-    //   throw Exception('Could not launch $url');
-    // }
   }
 
   @override
@@ -89,7 +89,7 @@ class SettingsItem extends StatelessWidget {
         ListTile(
           title: Text(title),
           // onTap: url != null ? () => _launchURL : null,
-          onTap: () {
+          onTap: () async {
             if (title == "로그아웃") {
               context.read<AuthCubit>().logout();
             } else if (title == "의견 보내기") {
@@ -101,6 +101,16 @@ class SettingsItem extends StatelessWidget {
               );
               if (url != null) {
                 _launchURL(url!);
+              }
+            } else if (title == "회원 탈퇴") {
+              print("회원탈퇴");
+              final result =
+                  await context.read<AuthCubit>().signupUseCase.deleteUser();
+              print("result ${result}");
+              if (result.isSuccess) {
+                showDeleteAccountModal(context);
+              } else {
+                SnackBar(content: Text("회원 탈퇴에 실패하였습니다"));
               }
             } else {
               if (url != null) {
@@ -117,6 +127,33 @@ class SettingsItem extends StatelessWidget {
       ],
     );
   }
+}
+
+void showDeleteAccountModal(BuildContext context) {
+  showDialog(
+    context: context,
+    barrierDismissible: false, // 사용자가 다이얼로그 바깥을 터치해도 닫히지 않도록 설정
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text('회원 탈퇴'),
+        content: Text('회원이 탈퇴되었습니다.'),
+        actions: <Widget>[
+          TextButton(
+            child: Text('확인'),
+            onPressed: () {
+              // 다이얼로그를 닫습니다.
+              Navigator.of(context).pop();
+
+              // 로그인 페이지로 네비게이션합니다.
+              // 'LoginPage'를 실제 로그인 페이지의 라우트 이름으로 변경하세요.
+              Navigator.of(context).pushNamedAndRemoveUntil(
+                  '/login', (Route<dynamic> route) => false);
+            },
+          ),
+        ],
+      );
+    },
+  );
 }
 
 class FeedbackModal extends StatelessWidget {
