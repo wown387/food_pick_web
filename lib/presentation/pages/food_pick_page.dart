@@ -3,6 +3,7 @@ import 'package:firebase_auth_demo/domain/entities/food/food.dart';
 import 'package:firebase_auth_demo/presentation/blocs/food_cubit.dart';
 import 'package:firebase_auth_demo/presentation/blocs/food_state.dart';
 import 'package:firebase_auth_demo/presentation/layouts/main_layout.dart';
+import 'package:firebase_auth_demo/utils/data_revised_util.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
 
@@ -59,11 +60,12 @@ class _FoodPickScreenState extends State<FoodPickScreen> {
   }
 
   void showSelectedTastes(String description) {
+    final currentState = context.read<DailyFoodsCubit>();
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('선택하신 음식과의 궁합'),
+          title: Text('${currentState.state.recommendedFood?.name} 음식과의 궁합'),
           content: Text(description),
 
           // Text(selectedTastes.isEmpty
@@ -176,7 +178,16 @@ class _FoodPickScreenState extends State<FoodPickScreen> {
                                     SizedBox(width: 5),
                                     GestureDetector(
                                       onTap: () {
-                                        // final object = selectedTastes;
+                                        final object1 = state.selectedFoodType;
+
+                                        final object2 = {
+                                          "name": state.recommendedFood!.name
+                                        };
+                                        // print(object);
+                                        final mergedObject = {
+                                          ...object1,
+                                          ...object2,
+                                        };
                                         final object = {
                                           "flavor": "매운맛",
                                           "name": state.recommendedFood!.name,
@@ -185,18 +196,10 @@ class _FoodPickScreenState extends State<FoodPickScreen> {
                                           "time": "점심",
                                           "type": "한식"
                                         };
-                                        // final object2 = {
-                                        //   "name": state.recommendedFood!.name
-                                        // };
-                                        // print(object);
-                                        // final mergedObject = {
-                                        //   ...object,
-                                        //   ...object2,
-                                        // };
-                                        // print("mergedObject ${mergedObject}");
+                                        print("mergedObject ${mergedObject}");
                                         context
                                             .read<DailyFoodsCubit>()
-                                            .getFoodCompatibility(object);
+                                            .getFoodCompatibility(mergedObject);
                                         // showSelectedTastes();
                                       },
                                       child: Container(
@@ -250,20 +253,28 @@ class _FoodPickScreenState extends State<FoodPickScreen> {
                             children: [],
                           ),
                           Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children:
+                                  state.metaData!.metaData.keys.map((metaKey) {
+                                return _buildFoodCategorySection(metaKey,
+                                    state.metaData!.metaData['${metaKey}']!);
+                              }).toList()),
+                          Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               // _buildFoodCategorySection(
                               //     "맛별", state.metaData!.flavors),
-                              _buildFoodCategorySection(
-                                  "맛별", state.metaData!.metaData['flavors']!),
-                              _buildFoodCategorySection("기본/테마별",
-                                  state.metaData!.metaData['themes']!),
-                              _buildFoodCategorySection("시나리오",
-                                  state.metaData!.metaData['scenarios']!),
-                              _buildFoodCategorySection(
-                                  "시간별", state.metaData!.metaData['times']!),
-                              _buildFoodCategorySection(
-                                  "종류별", state.metaData!.metaData['types']!),
+
+                              // _buildFoodCategorySection(
+                              //     "맛별", state.metaData!.metaData['flavors']!),
+                              // _buildFoodCategorySection("기본/테마별",
+                              //     state.metaData!.metaData['themes']!),
+                              // _buildFoodCategorySection("시나리오",
+                              //     state.metaData!.metaData['scenarios']!),
+                              // _buildFoodCategorySection(
+                              //     "시간별", state.metaData!.metaData['times']!),
+                              // _buildFoodCategorySection(
+                              //     "종류별", state.metaData!.metaData['types']!),
                               SizedBox(
                                 width: 10,
                               ),
@@ -278,16 +289,11 @@ class _FoodPickScreenState extends State<FoodPickScreen> {
                 ElevatedButton(
                   onPressed: () {
                     _scrollToTop();
-
-                    print(selectedTastes);
-                    // context.read<DailyFoodsCubit>().getSingleRecommendedFood({
-                    //   "flavor": "매운맛",
-                    //   "previousAnswer": "김치찌개 떡볶이 치킨",
-                    //   "scenario": "혼밥",
-                    //   "theme": "스트레스 해소",
-                    //   "time": "점심",
-                    //   "type": "한식"
-                    // });
+                    final trnasformedInput = transformData(selectedTastes);
+                    print("transform input ${trnasformedInput}");
+                    context
+                        .read<DailyFoodsCubit>()
+                        .getSingleRecommendedFood(trnasformedInput);
                     resetTastes();
                   },
                   style: ElevatedButton.styleFrom(

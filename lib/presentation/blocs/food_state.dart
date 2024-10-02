@@ -13,14 +13,15 @@ abstract class DailyFoodsState extends Equatable {
   final RankedFoodListModel? rankedFoods;
   final Food? recommendedFood;
   final FoodCompatibility? foodCompatibility;
+  final dynamic? selectedFoodType;
 
-  const DailyFoodsState({
-    this.dailyFoods,
-    this.metaData,
-    this.rankedFoods,
-    this.recommendedFood,
-    this.foodCompatibility,
-  });
+  const DailyFoodsState(
+      {this.dailyFoods,
+      this.metaData,
+      this.rankedFoods,
+      this.recommendedFood,
+      this.foodCompatibility,
+      this.selectedFoodType});
 
   @override
   List<Object?> get props =>
@@ -56,6 +57,7 @@ class DailyFoodsLoaded extends DailyFoodsState {
 
 class SingleRecommendedFoodLoaded extends DailyFoodsState {
   const SingleRecommendedFoodLoaded({
+    required dynamic selectedFoodType,
     required Food recommendedFood,
     required DailyFoods? dailyFoods,
     required MetaDataModel? metaData,
@@ -65,6 +67,7 @@ class SingleRecommendedFoodLoaded extends DailyFoodsState {
           dailyFoods: dailyFoods,
           metaData: metaData,
           rankedFoods: rankedFoods,
+          selectedFoodType: selectedFoodType,
         );
 }
 

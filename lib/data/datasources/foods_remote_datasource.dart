@@ -1,4 +1,3 @@
-
 // import 'package:food_pick/core/errors/exceptions.dart';
 // import 'package:food_pick/data/models/food/metadata_model.dart';
 // import 'package:food_pick/data/models/food/ranked_food_model.dart';
@@ -19,8 +18,7 @@ abstract class FoodsRemoteDataSource {
   Future<List<Food>> getSingleRecommendedFood(
       String accessToken, Map<String, dynamic> body);
   Future<RankedFoodListModel> getRankedFoodList();
-  Future<FoodCompatibility> getFoodCompatibility(
-      String accessToken, Map<String, dynamic> body);
+  Future<FoodCompatibility> getFoodCompatibility(String accessToken, body);
 }
 
 class DailyFoodsRemoteDataSourceImpl implements FoodsRemoteDataSource {
@@ -97,7 +95,8 @@ class DailyFoodsRemoteDataSourceImpl implements FoodsRemoteDataSource {
   // }
   @override
   Future<FoodCompatibility> getFoodCompatibility(
-      String accessToken, Map<String, dynamic> body) async {
+      String accessToken, body) async {
+    print("getFoodCompatibility ${body}");
     try {
       final response = await client.post(
         Uri.parse('${baseUrl}/v0.1/foods/select'),
@@ -107,7 +106,7 @@ class DailyFoodsRemoteDataSourceImpl implements FoodsRemoteDataSource {
           'tkn': accessToken,
         },
       );
-
+      print("response.body ${response.body}");
       if (response.statusCode == 200) {
         String decodedBody = utf8.decode(response.bodyBytes);
         // JSON 파싱
@@ -119,6 +118,7 @@ class DailyFoodsRemoteDataSourceImpl implements FoodsRemoteDataSource {
         throw ServerException();
       }
     } catch (e) {
+      print("error ${e}");
       if (e is ServerException) {
         rethrow;
       } else if (e is FormatException) {
@@ -133,6 +133,7 @@ class DailyFoodsRemoteDataSourceImpl implements FoodsRemoteDataSource {
   Future<List<Food>> getSingleRecommendedFood(
       String accessToken, Map<String, dynamic> body) async {
     try {
+      print(" getSingleRecommendedFood ${body}");
       final response = await client.post(
         Uri.parse('${baseUrl}/v0.1/foods/recommend'),
         body: json.encode(body),

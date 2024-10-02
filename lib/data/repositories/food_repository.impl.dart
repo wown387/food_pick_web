@@ -29,11 +29,12 @@ class FoodRepositoryImpl implements FoodRepository {
     try {
       final remoteFoodNames =
           await remoteDataSource.getFoodCompatibility('${token}', body);
+
       return Right(remoteFoodNames);
     } on ServerException {
-      return Left(ServerFailure());
+      return Left(ServerFailure(message: "server exception"));
     } catch (e) {
-      return Left(ServerFailure());
+      return Left(ServerFailure(message: "${e}"));
     }
   }
 

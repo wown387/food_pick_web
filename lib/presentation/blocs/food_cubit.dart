@@ -14,7 +14,7 @@ class DailyFoodsCubit extends Cubit<DailyFoodsState> {
   DailyFoodsCubit({required this.getFoodsDataUseCase})
       : super(DailyFoodsInitial());
 
-  Future<void> getFoodCompatibility(Map<String, dynamic> body) async {
+  Future<void> getFoodCompatibility(Map<dynamic, dynamic> body) async {
     emit(foodCompatibilityLoading(
       recommendedFood: state.recommendedFood,
       dailyFoods: state.dailyFoods,
@@ -67,11 +67,11 @@ class DailyFoodsCubit extends Cubit<DailyFoodsState> {
           // 성공 처리
           if (recommendedFoods.isNotEmpty) {
             emit(SingleRecommendedFoodLoaded(
-              recommendedFood: recommendedFoods[0],
-              dailyFoods: state.dailyFoods,
-              metaData: state.metaData,
-              rankedFoods: state.rankedFoods,
-            ));
+                recommendedFood: recommendedFoods[0],
+                dailyFoods: state.dailyFoods,
+                metaData: state.metaData,
+                rankedFoods: state.rankedFoods,
+                selectedFoodType: body));
           } else {
             emit(DailyFoodsError('No recommended food found'));
           }
