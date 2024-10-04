@@ -99,13 +99,12 @@ class _FoodPickScreenState extends State<FoodPickScreen> {
       },
       child: BlocBuilder<DailyFoodsCubit, DailyFoodsState>(
         builder: (context, state) {
+          print("food pick state ${state}");
           if (state is DailyFoodsInitial) {
             return Center(child: Text("로그인이 필요합니다"));
           } else if (state is DailyFoodsLoaded ||
               state is SingleRecommendedFoodLoaded ||
               state is foodCompatibilityLoaded) {
-            print("${state.foodCompatibility?.foodCompatibility}");
-            print("selectedTastes.isEmpty ${selectedTastes.isEmpty}");
             return Column(
               children: [
                 Expanded(
@@ -294,7 +293,7 @@ class _FoodPickScreenState extends State<FoodPickScreen> {
                     style: TextStyle(color: Colors.white),
                   ),
                 ),
-                SizedBox(height: 16),
+                SizedBox(height: 32),
                 if (selectedTastes.isNotEmpty)
                   Column(children: [
                     Padding(
@@ -370,7 +369,7 @@ class _FoodPickScreenState extends State<FoodPickScreen> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              padding: const EdgeInsets.symmetric(horizontal: 15.0),
               child: Text(
                 convertKeywordToKorean(title), // 중앙 텍스트
                 style: TextStyle(
@@ -422,7 +421,7 @@ class _FoodPickScreenState extends State<FoodPickScreen> {
                 .toList(),
           ),
         ),
-        SizedBox(height: 16),
+        SizedBox(height: 40),
       ],
     );
   }

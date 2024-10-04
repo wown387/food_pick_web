@@ -53,11 +53,15 @@ class DailyFoodsCubit extends Cubit<DailyFoodsState> {
   }
 
   Future<void> getSingleRecommendedFood(Map<String, dynamic> body) async {
+    emit(DailyFoodsLoading(
+      dailyFoods: state.dailyFoods,
+      metaData: state.metaData,
+      rankedFoods: state.rankedFoods,
+    ));
     try {
       Either<Failure, List<Food>> result =
           await getFoodsDataUseCase.getSingleRecommendedFood(body);
-      print("resultresultresultresult${result}");
-
+      print("getSingleRecommendedFood : ${result}");
       result.fold(
         (failure) {
           // 실패 처리

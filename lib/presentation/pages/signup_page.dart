@@ -274,7 +274,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('인증 이메일에 실패하였습니다 이메일을 확인해주세요.')),
+          SnackBar(content: Text('이미 가입된 이메일 입니다.')),
         );
       }
     } catch (e) {
@@ -506,7 +506,7 @@ class CustomTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      padding: const EdgeInsets.symmetric(vertical: 3.0),
       child: Row(
         children: [
           Expanded(
@@ -521,7 +521,7 @@ class CustomTextField extends StatelessWidget {
           ),
           if (hasButton && !isVerificationField)
             Padding(
-              padding: const EdgeInsets.only(left: 8.0),
+              padding: const EdgeInsets.only(left: 3.0),
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   shape: RoundedRectangleBorder(

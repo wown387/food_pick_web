@@ -6,7 +6,15 @@ import 'package:firebase_auth_demo/utils/navigation_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+// class LoginPage extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(body: LoginScreen());
+//   }
+// }
 class LoginPage extends StatelessWidget {
+  const LoginPage({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(body: LoginScreen());
@@ -14,6 +22,8 @@ class LoginPage extends StatelessWidget {
 }
 
 class LoginScreen extends StatelessWidget {
+  LoginScreen({Key? key}) : super(key: key);
+
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
 
@@ -21,9 +31,11 @@ class LoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     print("login screen");
     return BlocListener<AuthCubit, AuthState>(
+      listenWhen: (previous, current) {
+        // 이전 상태와 현재 상태가 다른 경우에만 true를 반환
+        return previous != current;
+      },
       listener: (context, state) {
-        print("BlocListenerBlocListener");
-        print(state);
         if (state is AuthError) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text("아이디와 비밀번호가 일치하지 않습니다")),
@@ -44,7 +56,7 @@ class LoginScreen extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                SizedBox(height: 8),
+                SizedBox(height: 2),
                 Text(
                   '푸드픽에서 단, 3초면 OK!!',
                   style: TextStyle(
@@ -56,8 +68,6 @@ class LoginScreen extends StatelessWidget {
                 ElevatedButton.icon(
                   onPressed: () {
                     context.read<AuthCubit>().gestLogin();
-                    // Navigator.pushNamed(context, '/main');
-                    // context.read<AuthCubit>().gestLogin();
                   },
                   icon: Icon(Icons.person_outline),
                   label: Text(
@@ -65,12 +75,11 @@ class LoginScreen extends StatelessWidget {
                     style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                   ),
                   style: ElevatedButton.styleFrom(
-                    // primary: Color(0xFFFB9A79),
                     backgroundColor: Color(0xFFFB9A79),
                     onPrimary: Colors.white,
                     minimumSize: Size(
-                      300,
-                      60,
+                      310,
+                      50,
                     ),
                     side: BorderSide(color: const Color(0xFFFB9A79)),
                     shape: RoundedRectangleBorder(
@@ -146,7 +155,7 @@ class LoginScreen extends StatelessWidget {
                   style: ElevatedButton.styleFrom(
                     primary: Color(0xFFFB9A79),
                     minimumSize: Size(
-                      300,
+                      310,
                       50,
                     ),
                     shape: RoundedRectangleBorder(
@@ -181,7 +190,7 @@ class LoginScreen extends StatelessWidget {
                     ),
                   ],
                 ),
-                SizedBox(height: 32),
+                const SizedBox(height: 32),
               ],
             ),
           ),

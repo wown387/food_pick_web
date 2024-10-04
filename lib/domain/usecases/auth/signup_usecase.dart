@@ -9,6 +9,15 @@ class SignupUseCase {
 
   SignupUseCase(this.repository);
 
+  Future<bool> isAuthToken() async {
+    final token = await repository.getToken();
+    if (token != null) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   Future<ResponseEntity> deleteUser() async {
     return await repository.deleteUser();
   }

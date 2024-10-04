@@ -102,7 +102,7 @@ class TrendingFoodItem extends StatelessWidget {
               overflow: TextOverflow.ellipsis, // 텍스트가 길면 "..."으로 표시
             ),
           ),
-          SizedBox(width: 16),
+          SizedBox(width: 30),
           Expanded(
             child: Text(
               name,

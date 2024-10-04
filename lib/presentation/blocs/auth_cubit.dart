@@ -23,6 +23,26 @@ class AuthCubit extends Cubit<AuthState> {
     required this.systemRequestUseCase,
   }) : super(Unauthenticated());
 
+  // Future<void> checkAuth() async {
+  //   final token = await signupUseCase.isAuthToken();
+  //   if (token) {
+  //     try {
+  //       // 토큰 유효성 검사 API 호출
+  //       // final isValid = await signupUseCase.validateToken(token);
+  //       final isValid = true;
+  //       if (isValid) {
+  //         emit(AuthAuthenticated());
+  //       } else {
+  //         emit(Unauthenticated());
+  //       }
+  //     } catch (e) {
+  //       emit(Unauthenticated());
+  //     }
+  //   } else {
+  //     emit(Unauthenticated());
+  //   }
+  // }
+
   Future<void> gestLogin() async {
     emit(AuthLoading());
     final result = await loginUseCase("", "", LoginType.guest);

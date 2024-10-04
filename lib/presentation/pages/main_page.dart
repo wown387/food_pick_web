@@ -305,16 +305,17 @@ class RankingItem extends StatelessWidget {
         children: [
           Text(
             '$rank',
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: Colors.red,
+              fontWeight: rank <= 3 ? FontWeight.bold : FontWeight.normal,
+              color: rank <= 3 ? Colors.red : Colors.black,
             ),
           ),
-          const SizedBox(width: 8),
+          const SizedBox(width: 12),
           Text(
             name,
-            style: const TextStyle(
+            style: TextStyle(
+              fontWeight: rank <= 3 ? FontWeight.bold : FontWeight.normal,
               fontSize: 18,
             ),
           ),

@@ -37,7 +37,22 @@ abstract class DailyFoodsState extends Equatable {
 
 class DailyFoodsInitial extends DailyFoodsState {}
 
-class DailyFoodsLoading extends DailyFoodsState {}
+// class DailyFoodsLoading extends DailyFoodsState {
+
+// }
+class DailyFoodsLoading extends DailyFoodsState {
+  const DailyFoodsLoading({
+    Food? recommendedFood,
+    DailyFoods? dailyFoods,
+    MetaDataModel? metaData,
+    RankedFoodListModel? rankedFoods,
+  }) : super(
+          recommendedFood: recommendedFood,
+          dailyFoods: dailyFoods,
+          metaData: metaData,
+          rankedFoods: rankedFoods,
+        );
+}
 
 class DailyFoodsLoaded extends DailyFoodsState {
   final DailyFoods dailyFoods;
@@ -49,6 +64,18 @@ class DailyFoodsLoaded extends DailyFoodsState {
     required this.metaData,
     required this.rankedFoods,
   });
+}
+
+class SingleRecommendedFoodLoading extends DailyFoodsState {
+  const SingleRecommendedFoodLoading({
+    required DailyFoods? dailyFoods,
+    required MetaDataModel? metaData,
+    RankedFoodListModel? rankedFoods,
+  }) : super(
+          dailyFoods: dailyFoods,
+          metaData: metaData,
+          rankedFoods: rankedFoods,
+        );
 }
 
 class SingleRecommendedFoodLoaded extends DailyFoodsState {
