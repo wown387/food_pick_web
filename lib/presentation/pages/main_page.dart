@@ -74,7 +74,9 @@ class _DailyFoodsScreenState extends State<DailyFoodsScreen> {
               ),
             );
           }
-          return Container(); // 이 부분은 실행되지 않아야 합니다.
+          return Center(
+            child: Text("page error"),
+          ); // 이 부분은 실행되지 않아야 합니다.
         },
       ),
       floatingActionButton: FloatingActionButton(
@@ -235,7 +237,8 @@ class _FoodPickScreenState extends State<FoodPickScreen> {
                 const Spacer(),
                 GestureDetector(
                   onTap: () {
-                    Navigator.push(
+                    print("navigator push");
+                    Navigator.pushReplacement(
                       context,
                       PageRouteBuilder(
                         pageBuilder: (context, animation, secondaryAnimation) =>
@@ -283,14 +286,14 @@ class _FoodPickScreenState extends State<FoodPickScreen> {
 class RankingItem extends StatelessWidget {
   final int rank;
   final String name;
-  final String change;
+  final String? change; // optional로 변경
   final Color? changeColor;
 
   const RankingItem({
     super.key,
     required this.rank,
     required this.name,
-    required this.change,
+    this.change, // required 제거
     this.changeColor,
   });
 
@@ -316,13 +319,14 @@ class RankingItem extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 8),
-          Text(
-            change,
-            style: TextStyle(
-              fontSize: 18,
-              color: changeColor ?? Colors.green,
+          if (change != null) // change가 null이 아닐 때만 표시
+            Text(
+              change!,
+              style: TextStyle(
+                fontSize: 18,
+                color: changeColor ?? Colors.green,
+              ),
             ),
-          ),
         ],
       ),
     );

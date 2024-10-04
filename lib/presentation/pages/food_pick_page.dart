@@ -9,9 +9,9 @@ import 'package:flutter/material.dart';
 class FoodPickPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MainLayout(
-        currentIndex: 0, // BottomNavigationBar의 현재 선택된 인덱스 설정
-        child: FoodPickScreen());
+    return MainLayout(currentIndex: 0, child: FoodPickScreen()
+        // FoodPickPage(),
+        );
   }
 }
 
@@ -177,6 +177,11 @@ class _FoodPickScreenState extends State<FoodPickScreen> {
                                     SizedBox(width: 5),
                                     GestureDetector(
                                       onTap: () {
+                                        if (state is foodCompatibilityLoaded) {
+                                          showSelectedTastes(
+                                              "${state.foodCompatibility?.foodCompatibility}");
+                                          return;
+                                        }
                                         final object1 = state.selectedFoodType;
                                         final object2 = {
                                           "name": state.recommendedFood!.name
@@ -247,6 +252,7 @@ class _FoodPickScreenState extends State<FoodPickScreen> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children:
                                   state.metaData!.metaData.keys.map((metaKey) {
+                                // return Text("${metaKey}");
                                 return _buildFoodCategorySection(metaKey,
                                     state.metaData!.metaData['${metaKey}']!);
                               }).toList()),
@@ -338,6 +344,7 @@ class _FoodPickScreenState extends State<FoodPickScreen> {
               ],
             );
           } else {
+            // return Text("food pick page");
             return Center(child: CircularProgressIndicator());
           }
         },
@@ -402,7 +409,7 @@ class _FoodPickScreenState extends State<FoodPickScreen> {
                       taste: {
                         "name": taste.name,
                         "image": taste.image,
-                        "title": title,
+                        "title": "title",
                       },
                       onTap: () => toggleTaste({
                         "name": taste.name,

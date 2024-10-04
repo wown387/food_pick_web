@@ -12,8 +12,9 @@ class ProfilePage extends StatelessWidget {
   Widget build(BuildContext context) {
     print(context.read<AuthCubit>());
     return MainLayout(
-        currentIndex: 3, // BottomNavigationBar의 현재 선택된 인덱스 설정
-        child: ProfileScreen());
+      currentIndex: 3, // BottomNavigationBar의 현재 선택된 인덱스 설정
+      child: ProfileScreen(),
+    );
   }
 }
 
