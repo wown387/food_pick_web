@@ -20,8 +20,8 @@ class DailyFoods {
 
   factory DailyFoods.fromJson(Map<String, dynamic> json) {
     var foodList = json['dilayFoods'] as List;
-    print("foodlistfoodlistfoodlistfoodlistfoodlist");
-    print(foodList);
+    // print("foodlistfoodlistfoodlistfoodlistfoodlist");
+    // print(foodList);
 
     List<Food> foods =
         foodList.map((foodJson) => Food.fromJson(foodJson)).toList();

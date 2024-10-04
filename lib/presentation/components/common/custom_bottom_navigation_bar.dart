@@ -32,7 +32,7 @@ class CustomBottomNavigationBar extends StatelessWidget {
           BottomNavigationBarItem(
             icon: Icon(Icons.update,
                 color: currentIndex == 2 ? Colors.orange : Colors.grey),
-            label: '업데이트 줌',
+            label: '업데이트 중',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person,

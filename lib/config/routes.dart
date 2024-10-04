@@ -10,6 +10,10 @@ class AppRouter {
     return MaterialPageRoute(
       builder: (context) {
         return BlocListener<AuthCubit, AuthState>(
+          listenWhen: (previous, current) {
+            // 이전 상태와 현재 상태가 다른 경우에만 리스너 실행
+            return previous != current;
+          },
           listener: (context, state) {
             print("route blocListener ${state}");
             if (state is AuthAuthenticated) {
@@ -29,6 +33,7 @@ class AppRouter {
       case '/':
         return BlocBuilder<AuthCubit, AuthState>(
           builder: (context, state) {
+            print("_getPageForRoute ${state} ${settings.name}");
             if (state is AuthAuthenticated) {
               return MainPage();
             } else {

@@ -58,6 +58,10 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
     setState(() {
       isCodeSent = true;
     });
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('이메일 요청에 성공하였습니다 이메일을 확인해주세요')),
+    );
+    return;
     print('인증코드 요청: ${_emailController.text}');
   }
 

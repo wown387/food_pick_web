@@ -75,7 +75,7 @@ class _DailyFoodsScreenState extends State<DailyFoodsScreen> {
             );
           }
           return Center(
-            child: Text("page error"),
+            child: Text("main page error"),
           ); // 이 부분은 실행되지 않아야 합니다.
         },
       ),

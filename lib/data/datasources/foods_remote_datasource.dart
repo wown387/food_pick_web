@@ -43,7 +43,7 @@ class DailyFoodsRemoteDataSourceImpl implements FoodsRemoteDataSource {
       Uri.parse('${baseUrl}/v0.1/foods/daily-recommend'),
       headers: {'Content-Type': 'application/json'},
     );
-    print(response.body);
+    // print(response.body);
 
     if (response.statusCode == 200) {
       // UTF-8로 디코딩
@@ -51,7 +51,7 @@ class DailyFoodsRemoteDataSourceImpl implements FoodsRemoteDataSource {
 
       // JSON 파싱
       Map<String, dynamic> jsonMap = json.decode(decodedBody);
-      print(jsonMap);
+      // print(jsonMap);
       // DailyFoods 객체로 변환
       return DailyFoods.fromJson(jsonMap);
     } else {

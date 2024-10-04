@@ -59,7 +59,7 @@ class SettingScreen extends StatelessWidget {
           ),
         );
       } else {
-        return Text("page error");
+        return Text("setting page error");
       }
     });
   }
@@ -141,7 +141,7 @@ void showDeleteAccountModal(BuildContext context) {
               // 다이얼로그를 닫습니다.
               Navigator.of(context).pop();
 
-              // 로그인 페이지로 네비게이션합니다.
+              // 로그인 페이지로 네비게이션합니웃다.
               // 'LoginPage'를 실제 로그인 페이지의 라우트 이름으로 변경하세요.
               Navigator.of(context).pushNamedAndRemoveUntil(
                   '/login', (Route<dynamic> route) => false);
