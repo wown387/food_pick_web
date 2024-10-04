@@ -12,7 +12,7 @@ class SettingPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return MainLayout(
       currentIndex: 3,
-      child: SettingPage(),
+      child: SettingScreen(),
     );
   }
 }
@@ -20,7 +20,6 @@ class SettingPage extends StatelessWidget {
 class SettingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    print(context.read<AuthCubit>());
     return BlocBuilder<AuthCubit, AuthState>(builder: (context, state) {
       if (state is AuthAuthenticated) {
         return Scaffold(

@@ -7,7 +7,8 @@ import '../../data/models/user_model.dart';
 abstract class AuthRepository {
   // Future<Either<Exception, UserModel>> signUp(body)
   // ;  
-  Future<ResponseEntity> deleteUser();
+  Future<ResponseEntity> deleteUser();  
+  Future<ResponseEntity> requestEmail(email);
   Future<ResponseEntity> checkEmail(email);
   Future<Either<Failure, UserModel>> signUp(body);
   Future<Either<Exception, UserModel>> getUserProfile(

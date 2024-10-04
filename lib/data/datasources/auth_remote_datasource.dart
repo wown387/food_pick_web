@@ -8,6 +8,7 @@ import 'dart:convert';
 abstract class AuthRemoteDataSource {
   Future<ResponseModel> deleteUser(token);
   Future<ResponseModel> checkEmail(email);
+  Future<ResponseModel> requestEmail(email);
   Future<ResponseModel> changeUserProfile(String accessToken, body);
   Future<UserModel> signUp(body);
   Future<UserModel> getUserProfile(String accessToken, int userId);
@@ -76,6 +77,20 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       }
     } catch (e) {
       throw Exception('Failed to request password reset');
+    }
+  }
+
+  @override
+  Future<ResponseModel> requestEmail(email) async {
+    final response = await client.post(
+      Uri.parse('${AppConstants.apiBaseUrl}/v0.1/auth/signup/request'),
+      body: json.encode({"email": email}),
+      headers: {'Content-Type': 'application/json'},
+    );
+    if (response.statusCode == 200) {
+      return ResponseModel.fromJson(json.decode(response.body));
+    } else {
+      return ResponseModel.fromJson(false);
     }
   }
 

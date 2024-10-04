@@ -30,6 +30,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController nameController = TextEditingController();
+  final TextEditingController verificationCodeController =
+      TextEditingController();
+  bool isEmailVerified = false;
+  bool isVerificationCodeSent = false;
   bool isChecked = false; // 체크박스 상태를 추적하는 변수
 
   String? selectedYear;
@@ -81,32 +85,46 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 ),
                 const SizedBox(height: 40),
                 CustomTextField(
-                  label: '이 메 일',
+                  label: '이메일',
                   controller: emailController,
                   hasButton: true,
-                  onDuplicateCheck: () async {
-                    // 여기에 중복 확인 로직을 구현합니다.
-                    String email = emailController.text;
-                    if (email.isEmpty || !emailController.text.contains('@')) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('유효한 이메일을 입력하세요.')),
-                      );
-                      return;
-                    }
-
-                    bool isDuplicate = await checkDuplicate(email);
-
-                    if (isDuplicate) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('이미 사용 중인 사용자 이름입니다.')),
-                      );
-                    } else {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('사용 가능한 사용자 이름입니다.')),
-                      );
-                    }
+                  onEmailVerification: () async {
+                    await sendVerificationEmail();
                   },
                 ),
+                if (isVerificationCodeSent)
+                  CustomTextField(
+                    label: '인증번호',
+                    controller: verificationCodeController,
+                    isVerificationField: true,
+                  ),
+                // CustomTextField(
+                //   label: '이 메 일',
+                //   controller: emailController,
+                //   hasButton: true,
+                //   onDuplicateCheck: () async {
+                //     // 여기에 중복 확인 로직을 구현합니다.
+                //     String email = emailController.text;
+                //     if (email.isEmpty || !emailController.text.contains('@')) {
+                //       ScaffoldMessenger.of(context).showSnackBar(
+                //         SnackBar(content: Text('유효한 이메일을 입력하세요.')),
+                //       );
+                //       return;
+                //     }
+
+                //     bool isDuplicate = await checkDuplicate(email);
+
+                //     if (isDuplicate) {
+                //       ScaffoldMessenger.of(context).showSnackBar(
+                //         SnackBar(content: Text('이미 사용 중인 사용자 이름입니다.')),
+                //       );
+                //     } else {
+                //       ScaffoldMessenger.of(context).showSnackBar(
+                //         SnackBar(content: Text('사용 가능한 사용자 이름입니다.')),
+                //       );
+                //     }
+                //   },
+                // ),
                 CustomTextField(
                   label: '비밀번호',
                   controller: passwordController,
@@ -209,7 +227,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         "email": "${emailController.text}",
                         "name": "${nameController.text}",
                         "password": "${passwordController.text}",
-                        "sex": "${selectedGender}"
+                        "sex": "${selectedGender}",
+                        "authCode": "${verificationCodeController.text}"
                       };
                       context.read<AuthCubit>().signUp(body);
                     },
@@ -230,17 +249,52 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
   }
 
+  Future<void> sendVerificationEmail() async {
+    String email = emailController.text;
+    if (email.isEmpty || !email.contains('@')) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('유효한 이메일을 입력하세요.')),
+      );
+      return;
+    }
+
+    // 여기에 이메일 인증 로직을 구현합니다.
+    try {
+      // await context.read<AuthCubit>().sendVerificationEmail(email);
+      // 위 주석을 해제하고 실제 인증 이메일 발송 로직을 구현하세요.
+
+      // 임시로 성공했다고 가정
+      setState(() {
+        isVerificationCodeSent = true;
+      });
+      final checkDuplicateResult = await checkDuplicate(email);
+      if (checkDuplicateResult) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('인증 이메일이 발송되었습니다. 이메일을 확인해주세요.')),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('인증 이메일에 실패하였습니다 이메일을 확인해주세요.')),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('이메일 인증 과정에서 오류가 발생했습니다.')),
+      );
+    }
+  }
+
   Future<bool> checkDuplicate(String email) async {
     // 여기에 실제 중복 확인 로직을 구현합니다.
     // 예를 들어, API 호출을 통해 서버에서 중복 여부를 확인할 수 있습니다.
     // 이 예제에서는 간단히 'admin'이라는 이름이 이미 사용 중이라고 가정합니다.
     final result =
-        await context.read<AuthCubit>().signupUseCase.checkEmail(email);
+        await context.read<AuthCubit>().signupUseCase.requestEmail(email);
     print("checkDuplicate ${result.isSuccess}");
     if (result.isSuccess) {
-      return false;
-    } else {
       return true;
+    } else {
+      return false;
     }
     // return result.isSuccess;
     // await Future.delayed(Duration(seconds: 1)); // 네트워크 지연 시뮬레이션
@@ -258,6 +312,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   bool validateSignUpData(BuildContext context) {
     // Email 검증
+    // if (!isEmailVerified) {
+    //   ScaffoldMessenger.of(context).showSnackBar(
+    //     SnackBar(content: Text('이메일 인증이 필요합니다.')),
+    //   );
+    //   return false;
+    // }
     if (emailController.text.isEmpty || !emailController.text.contains('@')) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('유효한 이메일을 입력하세요.')),
@@ -297,23 +357,149 @@ class _SignUpScreenState extends State<SignUpScreen> {
       );
       return false;
     }
+    if (isChecked == false) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('이용약관을 동의해주세요')),
+      );
+      return false;
+    }
 
     // 모든 검증 통과
     return true;
   }
 }
 
+// class CustomTextField extends StatelessWidget {
+//   final String label;
+//   final bool hasButton;
+//   final TextEditingController controller;
+//   final Future<void> Function()? onDuplicateCheck; // 추가된 콜백 함수
+
+//   const CustomTextField({
+//     required this.label,
+//     required this.controller,
+//     this.hasButton = false,
+//     this.onDuplicateCheck, // 콜백 함수 추가
+//     super.key,
+//   });
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Padding(
+//       padding: const EdgeInsets.symmetric(vertical: 8.0),
+//       child: Row(
+//         children: [
+//           Expanded(
+//             child: TextField(
+//               obscureText: label == "비밀번호", // 레이블이 "비밀번호"일 때 텍스트를 가림
+//               controller: controller,
+//               decoration: InputDecoration(
+//                 labelText: label,
+//                 border: const UnderlineInputBorder(),
+//               ),
+//             ),
+//           ),
+//           if (hasButton)
+//             Padding(
+//               padding: const EdgeInsets.only(left: 8.0),
+//               child: ElevatedButton(
+//                 style: ElevatedButton.styleFrom(
+//                   shape: RoundedRectangleBorder(
+//                     borderRadius: BorderRadius.circular(7.0),
+//                   ),
+//                   backgroundColor: Colors.grey,
+//                   padding:
+//                       const EdgeInsets.symmetric(horizontal: 16, vertical: 3),
+//                 ),
+//                 onPressed: () async {
+//                   if (onDuplicateCheck != null) {
+//                     await onDuplicateCheck!(); // 콜백 함수 호출
+//                   }
+//                   // 중복 확인 버튼의 로직을 여기에 작성하세요
+//                 },
+//                 child: const Text(
+//                   '중복확인',
+//                   style: TextStyle(color: Colors.white),
+//                 ),
+//               ),
+//             ),
+//         ],
+//       ),
+//     );
+//   }
+// }
+// class CustomTextField extends StatelessWidget {
+//   final String label;
+//   final bool hasButton;
+//   final TextEditingController controller;
+//   final Future Function()? onEmailVerification; // 변경된 콜백 함수
+
+//   const CustomTextField({
+//     required this.label,
+//     required this.controller,
+//     this.hasButton = false,
+//     this.onEmailVerification, // 변경된 콜백 함수
+//     super.key,
+//   });
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Padding(
+//       padding: const EdgeInsets.symmetric(vertical: 8.0),
+//       child: Row(
+//         children: [
+//           Expanded(
+//             child: TextField(
+//               obscureText: label == "비밀번호",
+//               controller: controller,
+//               decoration: InputDecoration(
+//                 labelText: label,
+//                 border: const UnderlineInputBorder(),
+//               ),
+//             ),
+//           ),
+//           if (hasButton)
+//             Padding(
+//               padding: const EdgeInsets.only(left: 8.0),
+//               child: ElevatedButton(
+//                 style: ElevatedButton.styleFrom(
+//                   shape: RoundedRectangleBorder(
+//                     borderRadius: BorderRadius.circular(7.0),
+//                   ),
+//                   backgroundColor: Colors.grey,
+//                   padding:
+//                       const EdgeInsets.symmetric(horizontal: 16, vertical: 3),
+//                 ),
+//                 onPressed: () async {
+//                   if (onEmailVerification != null) {
+//                     await onEmailVerification!();
+//                   }
+//                 },
+//                 child: const Text(
+//                   '인증하기',
+//                   style: TextStyle(color: Colors.white),
+//                 ),
+//               ),
+//             ),
+//         ],
+//       ),
+//     );
+//   }
+// }
+
 class CustomTextField extends StatelessWidget {
   final String label;
   final bool hasButton;
   final TextEditingController controller;
-  final Future<void> Function()? onDuplicateCheck; // 추가된 콜백 함수
+  final Future Function()? onEmailVerification;
+  final bool isVerificationField;
 
   const CustomTextField({
     required this.label,
     required this.controller,
     this.hasButton = false,
-    this.onDuplicateCheck, // 콜백 함수 추가
+    this.onEmailVerification,
+    this.isVerificationField = false,
     super.key,
   });
 
@@ -325,7 +511,7 @@ class CustomTextField extends StatelessWidget {
         children: [
           Expanded(
             child: TextField(
-              obscureText: label == "비밀번호", // 레이블이 "비밀번호"일 때 텍스트를 가림
+              obscureText: label == "비밀번호",
               controller: controller,
               decoration: InputDecoration(
                 labelText: label,
@@ -333,7 +519,7 @@ class CustomTextField extends StatelessWidget {
               ),
             ),
           ),
-          if (hasButton)
+          if (hasButton && !isVerificationField)
             Padding(
               padding: const EdgeInsets.only(left: 8.0),
               child: ElevatedButton(
@@ -346,17 +532,38 @@ class CustomTextField extends StatelessWidget {
                       const EdgeInsets.symmetric(horizontal: 16, vertical: 3),
                 ),
                 onPressed: () async {
-                  if (onDuplicateCheck != null) {
-                    await onDuplicateCheck!(); // 콜백 함수 호출
+                  if (onEmailVerification != null) {
+                    await onEmailVerification!();
                   }
-                  // 중복 확인 버튼의 로직을 여기에 작성하세요
                 },
                 child: const Text(
-                  '중복확인',
+                  '인증하기',
                   style: TextStyle(color: Colors.white),
                 ),
               ),
             ),
+          // 인증번호 확인 버튼
+          // if (isVerificationField)
+          //   Padding(
+          //     padding: const EdgeInsets.only(left: 8.0),
+          //     child: ElevatedButton(
+          //       style: ElevatedButton.styleFrom(
+          //         shape: RoundedRectangleBorder(
+          //           borderRadius: BorderRadius.circular(7.0),
+          //         ),
+          //         backgroundColor: Colors.grey,
+          //         padding:
+          //             const EdgeInsets.symmetric(horizontal: 16, vertical: 3),
+          //       ),
+          //       onPressed: () {
+          //         // 인증번호 확인 로직
+          //       },
+          //       child: const Text(
+          //         '확인',
+          //         style: TextStyle(color: Colors.white),
+          //       ),
+          //     ),
+          //   ),
         ],
       ),
     );

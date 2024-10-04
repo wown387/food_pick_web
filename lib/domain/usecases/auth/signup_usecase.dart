@@ -29,6 +29,10 @@ class SignupUseCase {
     return await repository.checkEmail(email);
   }
 
+  Future<ResponseEntity> requestEmail(email) async {
+    return await repository.requestEmail(email);
+  }
+
   Future<Either<Failure, UserModel>> regist(body) async {
     print("regist start");
     // final user = await repository.signUp(body);
