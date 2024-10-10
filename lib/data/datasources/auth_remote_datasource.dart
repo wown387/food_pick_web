@@ -187,6 +187,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   @override
   Future<UserModel> guestLogin() async {
     try {
+      print("guestLogin start");
       final response = await client.post(
         Uri.parse('${AppConstants.apiBaseUrl}/v0.1/auth/guest'),
         body: json.encode({}),
@@ -197,9 +198,11 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       if (response.statusCode == 200) {
         return UserModel.fromGuestAuthJson(json.decode(response.body));
       } else {
+        print("errorrrrrrr");
         throw AuthException('Invalid credentials');
       }
     } catch (e) {
+      print("errorrrrrrr!!!!!!!! ${e}");
       throw ServerException('Login failed: ${e.toString()}');
     }
   }

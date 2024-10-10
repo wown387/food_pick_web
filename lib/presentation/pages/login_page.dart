@@ -62,6 +62,7 @@ class LoginScreen extends StatelessWidget {
                 SizedBox(height: 32),
                 ElevatedButton.icon(
                   onPressed: () {
+                    print("login auth cubit");
                     context.read<AuthCubit>().gestLogin();
                   },
                   icon: Icon(Icons.person_outline),

@@ -3,7 +3,7 @@ import 'package:firebase_auth_demo/presentation/blocs/auth_state.dart';
 import 'package:firebase_auth_demo/presentation/layouts/main_layout.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
-import 'dart:html' as html;
+import 'package:url_launcher/url_launcher.dart';
 
 class SettingPage extends StatelessWidget {
   const SettingPage({super.key});
@@ -77,7 +77,11 @@ class SettingsItem extends StatelessWidget {
 
   Future<void> _launchURL(String url) async {
     final Uri uri = Uri.parse(url);
-    html.window.open(url, '_blank'); // 새 창에서 URL 열기
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    } else {
+      throw 'Could not launch $url';
+    }
   }
 
   @override
