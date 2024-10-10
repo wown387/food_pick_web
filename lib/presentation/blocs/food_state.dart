@@ -41,17 +41,18 @@ class DailyFoodsInitial extends DailyFoodsState {}
 
 // }
 class DailyFoodsLoading extends DailyFoodsState {
-  const DailyFoodsLoading({
-    Food? recommendedFood,
-    DailyFoods? dailyFoods,
-    MetaDataModel? metaData,
-    RankedFoodListModel? rankedFoods,
-  }) : super(
-          recommendedFood: recommendedFood,
-          dailyFoods: dailyFoods,
-          metaData: metaData,
-          rankedFoods: rankedFoods,
-        );
+  const DailyFoodsLoading(
+      {Food? recommendedFood,
+      DailyFoods? dailyFoods,
+      MetaDataModel? metaData,
+      RankedFoodListModel? rankedFoods,
+      List<String>? previousAnswer})
+      : super(
+            recommendedFood: recommendedFood,
+            dailyFoods: dailyFoods,
+            metaData: metaData,
+            rankedFoods: rankedFoods,
+            previousAnswer: previousAnswer);
 }
 
 class DailyFoodsLoaded extends DailyFoodsState {

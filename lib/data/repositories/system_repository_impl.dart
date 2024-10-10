@@ -1,17 +1,11 @@
 import 'package:dartz/dartz.dart';
 import 'package:firebase_auth_demo/core/errors/exceptions.dart';
 import 'package:firebase_auth_demo/core/errors/failures.dart';
-import 'package:firebase_auth_demo/data/datasources/foods_remote_datasource.dart';
 import 'package:firebase_auth_demo/data/datasources/locals/secure_storage_data_source.dart';
 import 'package:firebase_auth_demo/data/datasources/system_remote_datasource.dart';
-import 'package:firebase_auth_demo/data/models/food/metadata_model.dart';
-import 'package:firebase_auth_demo/data/models/food/ranked_food_model.dart';
-import 'package:firebase_auth_demo/data/models/food_compatibility_model.dart';
 import 'package:firebase_auth_demo/domain/entities/auth/response_entity.dart';
-import 'package:firebase_auth_demo/domain/entities/food/food.dart';
-import 'package:firebase_auth_demo/domain/entities/food/food_compatibility.dart';
-import 'package:firebase_auth_demo/domain/repositories/food_repository.dart';
 import 'package:firebase_auth_demo/domain/repositories/system_repository.dart';
+import 'package:flutter/material.dart';
 
 class SystemRepositoryImpl implements SystemRepository {
   final SystemRemoteDataSource remoteDataSource;
@@ -29,10 +23,7 @@ class SystemRepositoryImpl implements SystemRepository {
       Map<String, dynamic> body) async {
     // if (await networkInfo.isConnected) {
     final token = await secureStorageDataSource.getToken();
-    print("tokentokentoken!!!! ${token} ${body} getSingleRecommendedFood");
-    // final remoteSystemReportModel =
-    //       await remoteDataSource.report('${token}', body);
-    //   return remoteSystemReportModel.toEntity();
+    debugPrint("tokentokentoken!!!! ${token} ${body} getSingleRecommendedFood");
     try {
       final remoteSystemReportModel =
           await remoteDataSource.report('${token}', body);
@@ -45,10 +36,6 @@ class SystemRepositoryImpl implements SystemRepository {
       return Left(ServerFailure());
     }
   }
-  // else {
-  //   return Left(NetworkFailure());
-  // }
-  // }
 }
 
 class FetchDataException implements Exception {

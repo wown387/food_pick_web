@@ -10,7 +10,6 @@ class MainPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     print("mainPage");
-    // print(context.read<AuthCubit>().state);
     return Scaffold(body: FoodPickScreen());
   }
 }

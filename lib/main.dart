@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth_demo/config/routes.dart';
 import 'package:firebase_auth_demo/presentation/blocs/auth_cubit.dart';
 import 'package:firebase_auth_demo/presentation/blocs/food_cubit.dart';

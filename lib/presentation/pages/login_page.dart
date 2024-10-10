@@ -6,12 +6,6 @@ import 'package:firebase_auth_demo/utils/navigation_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-// class LoginPage extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(body: LoginScreen());
-//   }
-// }
 class LoginPage extends StatelessWidget {
   const LoginPage({Key? key}) : super(key: key);
 
@@ -49,6 +43,7 @@ class LoginScreen extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                /// 레이아웃 나눌 필요  있을까? Top, middle, bottom 정도
                 Text(
                   '오늘의 메뉴, 고민 끝!',
                   style: TextStyle(

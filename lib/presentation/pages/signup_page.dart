@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:firebase_auth_demo/presentation/blocs/auth_cubit.dart';
 import 'package:firebase_auth_demo/presentation/blocs/auth_state.dart';
 import 'package:flutter/material.dart';
@@ -43,6 +45,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   @override
   Widget build(BuildContext context) {
+    print("this.isVerificationCodeSent ${this.isVerificationCodeSent}");
     return BlocListener<AuthCubit, AuthState>(
       listener: (context, state) {
         print("signup BlocListenerBlocListener ${state}");
@@ -87,6 +90,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 CustomTextField(
                   label: '이메일',
                   controller: emailController,
+                  isVerificationField: isVerificationCodeSent,
                   hasButton: true,
                   onEmailVerification: () async {
                     await sendVerificationEmail();
@@ -96,7 +100,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   CustomTextField(
                     label: '인증번호',
                     controller: verificationCodeController,
-                    isVerificationField: true,
+                    isVerificationField: isVerificationCodeSent,
                   ),
                 // CustomTextField(
                 //   label: '이 메 일',
@@ -249,13 +253,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
   }
 
-  Future<void> sendVerificationEmail() async {
+  Future<bool> sendVerificationEmail() async {
     String email = emailController.text;
     if (email.isEmpty || !email.contains('@')) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('유효한 이메일을 입력하세요.')),
       );
-      return;
+      return false;
     }
 
     // 여기에 이메일 인증 로직을 구현합니다.
@@ -264,14 +268,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
       // 위 주석을 해제하고 실제 인증 이메일 발송 로직을 구현하세요.
 
       // 임시로 성공했다고 가정
-      setState(() {
-        isVerificationCodeSent = true;
-      });
+
       final checkDuplicateResult = await checkDuplicate(email);
       if (checkDuplicateResult) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('인증 이메일이 발송되었습니다. 이메일을 확인해주세요.')),
         );
+        setState(() {
+          isVerificationCodeSent = true;
+        });
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('이미 가입된 이메일 입니다.')),
@@ -281,7 +286,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('이메일 인증 과정에서 오류가 발생했습니다.')),
       );
+      return false;
     }
+    return true;
   }
 
   Future<bool> checkDuplicate(String email) async {
@@ -487,11 +494,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
 //   }
 // }
 
-class CustomTextField extends StatelessWidget {
+class CustomTextField extends StatefulWidget {
   final String label;
   final bool hasButton;
   final TextEditingController controller;
-  final Future Function()? onEmailVerification;
+  final void Function()? onEmailVerification;
   final bool isVerificationField;
 
   const CustomTextField({
@@ -499,27 +506,45 @@ class CustomTextField extends StatelessWidget {
     required this.controller,
     this.hasButton = false,
     this.onEmailVerification,
-    this.isVerificationField = false,
+    this.isVerificationField = false, // 기본값을 직접 false로 설정
+
     super.key,
   });
 
   @override
+  State<CustomTextField> createState() => _CustomTextFieldState();
+}
+
+class _CustomTextFieldState extends State<CustomTextField> {
+  // 위에서 내려준 isVerificationField 값에 따라서 세분화
+  bool isButtonEnabled = true;
+  int countdown = 60;
+  @override
   Widget build(BuildContext context) {
+    print(
+        "widget.isVerificationField ${widget.isVerificationField} ${widget.label}");
+    // 버튼을 누른다음  validation 완료후 타이머 상태변경 start
+    if (widget.isVerificationField &&
+        isButtonEnabled == true &&
+        widget.label == "이메일" &&
+        countdown == 60) {
+      startCountdown();
+    }
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 3.0),
       child: Row(
         children: [
           Expanded(
             child: TextField(
-              obscureText: label == "비밀번호",
-              controller: controller,
+              obscureText: widget.label == "비밀번호",
+              controller: widget.controller,
               decoration: InputDecoration(
-                labelText: label,
+                labelText: widget.label,
                 border: const UnderlineInputBorder(),
               ),
             ),
           ),
-          if (hasButton && !isVerificationField)
+          if (widget.hasButton)
             Padding(
               padding: const EdgeInsets.only(left: 3.0),
               child: ElevatedButton(
@@ -527,18 +552,35 @@ class CustomTextField extends StatelessWidget {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(7.0),
                   ),
-                  backgroundColor: Colors.grey,
+                  backgroundColor:
+                      isButtonEnabled ? Colors.grey : Colors.grey.shade300,
                   padding:
                       const EdgeInsets.symmetric(horizontal: 16, vertical: 3),
                 ),
                 onPressed: () async {
-                  if (onEmailVerification != null) {
-                    await onEmailVerification!();
+                  if (!isButtonEnabled || widget.onEmailVerification == null) {
+                    if (countdown > 0 && countdown < 60) {
+                      showWaitingDialog(countdown);
+                    }
+                    return;
                   }
+                  // 새로 눌렀을때 세팅
+                  setState(() {
+                    countdown = 60;
+                  });
+                  widget.onEmailVerification!();
+
+                  // if (widget.onEmailVerification != null) {
+
+                  // }
                 },
-                child: const Text(
+                child: Text(
                   '인증하기',
-                  style: TextStyle(color: Colors.white),
+                  // widget.isVerificationField == false
+                  //     ? '인증하기'
+                  //     : '인증하기 ${countdown}',
+                  style: TextStyle(
+                      color: isButtonEnabled ? Colors.white : Colors.grey),
                 ),
               ),
             ),
@@ -567,6 +609,50 @@ class CustomTextField extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  void showWaitingDialog(countdown) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('잠시만 기다려주세요'),
+          content: Text('다음 인증 요청까지 ${countdown}초 남았습니다.'),
+          actions: <Widget>[
+            TextButton(
+              child: Text('확인'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void startCountdown() {
+    print("start countdwon");
+    setState(() {
+      isButtonEnabled = false;
+      countdown = 60;
+    });
+    Timer.periodic(Duration(seconds: 1), (timer) {
+      setState(() {
+        if (countdown > 0) {
+          countdown--;
+        } else {
+          isButtonEnabled = true;
+          timer.cancel();
+        }
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    // 타이머가 활성화된 상태에서 위젯이 dispose되는 경우를 대비
+    super.dispose();
   }
 }
 

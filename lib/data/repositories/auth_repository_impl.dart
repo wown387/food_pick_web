@@ -1,12 +1,9 @@
 import 'package:dartz/dartz.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_auth_demo/core/errors/exceptions.dart';
 import 'package:firebase_auth_demo/data/datasources/locals/secure_storage_data_source.dart';
-import 'package:firebase_auth_demo/data/models/response_model.dart';
 import 'package:firebase_auth_demo/data/models/user_model.dart';
 import 'package:firebase_auth_demo/domain/entities/auth/response_entity.dart';
 import 'package:firebase_auth_demo/domain/repositories/auth_repository.dart';
-import '../../domain/entities/auth/user.dart';
 import '../datasources/auth_remote_datasource.dart';
 import '../../core/errors/failures.dart';
 

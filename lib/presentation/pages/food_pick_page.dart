@@ -9,9 +9,7 @@ import 'package:flutter/material.dart';
 class FoodPickPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MainLayout(currentIndex: 0, child: FoodPickScreen()
-        // FoodPickPage(),
-        );
+    return MainLayout(currentIndex: 0, child: FoodPickScreen());
   }
 }
 
@@ -22,11 +20,6 @@ class FoodPickScreen extends StatefulWidget {
 
 class _FoodPickScreenState extends State<FoodPickScreen> {
   final ScrollController _scrollController = ScrollController();
-  // Map<String, String?> selectedItems = {
-  //   '상황': null,
-  //   '시간': null,
-  //   '메뉴': null,
-  // };
 
   final Set<Map<String, String>> selectedTastes = {};
   void resetTastes() {
@@ -66,10 +59,6 @@ class _FoodPickScreenState extends State<FoodPickScreen> {
         return AlertDialog(
           title: Text('${currentState.state.recommendedFood?.name} 음식과의 궁합'),
           content: Text(description),
-
-          // Text(selectedTastes.isEmpty
-          //     ? '선택된 맛이 없습니다.'
-          //     : selectedTastes.map((taste) => taste['name']).join(', ')),
           actions: <Widget>[
             TextButton(
               child: const Text('확인'),
@@ -124,7 +113,7 @@ class _FoodPickScreenState extends State<FoodPickScreen> {
                                   fontSize: 30,
                                 ),
                               ),
-                              SizedBox(height: 8),
+                              // SizedBox(height: 3),
                               Text(
                                 '선택에 맞게 메뉴를 찾아드려요',
                                 style:
@@ -137,18 +126,60 @@ class _FoodPickScreenState extends State<FoodPickScreen> {
                             Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Container(
-                                  width: 300,
-                                  height: 200,
-                                  decoration: BoxDecoration(
-                                    border: Border.all(color: Colors.blue),
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  child: Image.network(
-                                    state.recommendedFood!.image,
-                                    fit: BoxFit.cover,
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(10),
+                                  child: Container(
+                                    width: 300,
+                                    height: 200,
+                                    decoration: BoxDecoration(
+                                      border: Border.all(color: Colors.blue),
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: Image.network(
+                                      state.recommendedFood!.image,
+                                      fit: BoxFit.cover,
+                                      width: 300,
+                                      height: 200,
+                                      loadingBuilder: (BuildContext context,
+                                          Widget child,
+                                          ImageChunkEvent? loadingProgress) {
+                                        if (loadingProgress == null)
+                                          return child;
+                                        return Center(
+                                          child: CircularProgressIndicator(
+                                            value: loadingProgress
+                                                        .expectedTotalBytes !=
+                                                    null
+                                                ? loadingProgress
+                                                        .cumulativeBytesLoaded /
+                                                    loadingProgress
+                                                        .expectedTotalBytes!
+                                                : null,
+                                          ),
+                                        );
+                                      },
+                                      errorBuilder:
+                                          (context, error, stackTrace) {
+                                        return Center(
+                                            child: Text('이미지를 불러올 수 없습니다.'));
+                                      },
+                                    ),
                                   ),
                                 ),
+                                // Container(
+                                //   width: 300,
+                                //   height: 200,
+                                //   decoration: BoxDecoration(
+                                //     border: Border.all(color: Colors.blue),
+                                //     borderRadius: BorderRadius.circular(10),
+                                //   ),
+                                //   child: Image.network(
+
+                                //     state.recommendedFood!.image,
+                                //     fit: BoxFit.contain,
+                                //   ),
+                                // ),
+                                // "https://dev-food-recommendation.s3.ap-northeast-2.amazonaws.com/images/LGZuBocZo694mvSCc8mv9SfgdgraD4Wd.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=ASIA2UC3AAWRP4OTJV2S%2F20241007%2Fap-northeast-2%2Fs3%2Faws4_request&X-Amz-Date=20241007T051427Z&X-Amz-Expires=7200&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEMv%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaDmFwLW5vcnRoZWFzdC0yIkcwRQIhAJ88O5nRQyzhn4deD7%2B2LV2Mkt0f0CxoAthjI%2BVtIqwYAiBjKTqRsviOQNw0BmIFMnRboHc0Ciiq1CVJge%2FTzYTz7irqAwgkEAAaDDczMDMzNTI4MjU5NCIMuKG3PJYzsMWKe3BmKscD8zWZEoLkYzehztVxk76rt7x8kvMZCg93ZEfKsoR%2B%2BSnDcPM%2B8vW3Et2Mu1KHfMS0mKsw2G1bbPkZMQSmJMNDYwASNp2vMQGauvHhvniM8d80zq3ZLXPPIq1Rmh9Dthu7KtI%2Bwzl4SKwxlfpFG76D4ywNwHzy79MNz9ln1WESN1OSY8FiZrAPxywFvuXT3TBFRTlczhJolJccHJ8lGwKTm9XNkWbNWVFWDD%2BEzB1FMbQvE4CaRs%2BCOnYZVty11kGNE%2Ff3mlukqpqER8X3o0kMazYZj0GON6FKvrBKAfPWhpXFLGTxvSIyYpkb5Ph9yhXOkC8iW5yFoqCaA1S0JQKd%2BVbLdeNywUXs66OH50sPw2y%2FysRYRASi5CabI5ZxCbrnyZ8gFcR2yiZEpJx69zux1HQo6lajN%2B2H1QQvTayMdbMw3B4WB5cKTdcC75Ps0mleF6fEX0Fa33wdIeGltQBohHyrefMmOPyg4WxmKKox5qQg8z9Bhet5Ol67C12SVRohh3j6j%2Fsktq2AF0WjiMPA0zJ9xwqNuSm4o%2F7f1%2Fl9CTIfdQWQCu9NSKMMFOGRTAeAdtXqXkhapgRDtq1z%2B9xX1zbubNY97%2BQw%2B5yNuAY6pQFk9I6%2B807%2Frr8RI4FG%2BWfbat6PdT3ifOrQC55ihItDWfaJaKDYQR8R%2F8VbbE7bvgqTHsKDxdEn2kpd9pM7m9bgQjR8Ur5TZ2oxT7S2V4uLzNfdwUhRbOEjiP2x2jO19RxnMojQX1ohveOhsOf6tbeurCsRrihWDpZOcsCFEDCAxa0zCb8mPdUAGfA%2BVtLyoWtlAJz48YG2nT%2BZWMoMM5xMZDyQX7I%3D&X-Amz-SignedHeaders=host&x-id=GetObject&X-Amz-Signature=85d7c6db62b6869f8e2def786e10bd42f410cbec0c671a4f0a0808f90b7fa052",
                                 SizedBox(height: 10),
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
@@ -185,7 +216,6 @@ class _FoodPickScreenState extends State<FoodPickScreen> {
                                         final object2 = {
                                           "name": state.recommendedFood!.name
                                         };
-                                        // print(object);
                                         final mergedObject = {
                                           ...object1,
                                           ...object2,
@@ -264,14 +294,14 @@ class _FoodPickScreenState extends State<FoodPickScreen> {
                 ElevatedButton(
                   onPressed: () {
                     _scrollToTop();
-                    final trnasformedInput = transformData(selectedTastes);
-                    print("transform input ${trnasformedInput}");
+                    final transformDataInput = transformData(selectedTastes);
+                    print("transform input ${transformDataInput}");
                     print("previous answer ${state.previousAnswer}");
                     final mergedObject = {
-                      ...trnasformedInput,
+                      ...transformDataInput,
                       "previousAnswer": state.previousAnswer == null
                           ? ""
-                          : state.previousAnswer![0]
+                          : state.previousAnswer!.map((food) => food).join(' ')
                     };
                     print("mergedObject ${mergedObject}");
                     context
@@ -445,14 +475,6 @@ class TasteCircle extends StatelessWidget {
       onTap: onTap,
       child: Column(
         children: [
-          // CircleAvatar(
-          //   radius: 30,
-          //   backgroundImage: NetworkImage(taste['image']!),
-          //   child: isSelected
-          //       ? const Icon(Icons.check, color: Colors.white)
-          //       : null,
-          // ),
-
           CircleAvatar(
             radius: 30,
             backgroundImage: NetworkImage(taste['image']!),

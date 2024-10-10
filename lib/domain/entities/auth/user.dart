@@ -16,4 +16,20 @@ class User {
     this.sex,
     this.photoUrl,
   });
+
+  // bool isAdult() => birth >= 18;
+
+  // User copyWith({
+  //   String? id,
+  //   String? name,
+  //   String? email,
+  //   int? age,
+  // }) {
+  //   return User(
+  //     id: id ?? this.id,
+  //     username: name ?? this.name,
+  //     email: email ?? this.email,
+  //     age: age ?? this.age,
+  //   );
+  // }
 }

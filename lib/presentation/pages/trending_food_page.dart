@@ -97,7 +97,9 @@ class TrendingFoodItem extends StatelessWidget {
               style: TextStyle(
                 color: rank <= 3 ? Color(0xFFFB9A79) : Colors.black,
                 fontSize: 20,
-                fontWeight: FontWeight.bold, // 숫자는 항상 볼드체
+                fontWeight: rank <= 3
+                    ? FontWeight.bold
+                    : FontWeight.normal, // 숫자는 항상 볼드체
               ),
               overflow: TextOverflow.ellipsis, // 텍스트가 길면 "..."으로 표시
             ),

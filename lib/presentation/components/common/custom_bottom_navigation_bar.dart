@@ -13,10 +13,10 @@ class CustomBottomNavigationBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 100, // 원하는 높이로 설정
+      height: 60, // 원하는 높이로 설정
       width: double.infinity, // 너비를 화면 전체로 설정
       child: BottomNavigationBar(
-         type: BottomNavigationBarType.fixed, // 아이템 간의 간격이 고정되도록 설정
+        type: BottomNavigationBarType.fixed, // 아이템 간의 간격이 고정되도록 설정
         currentIndex: currentIndex,
         items: [
           BottomNavigationBarItem(

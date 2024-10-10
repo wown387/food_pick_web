@@ -57,11 +57,12 @@ class DailyFoodsCubit extends Cubit<DailyFoodsState> {
       dailyFoods: state.dailyFoods,
       metaData: state.metaData,
       rankedFoods: state.rankedFoods,
+      previousAnswer: state.previousAnswer,
     ));
     try {
       Either<Failure, List<Food>> result =
           await getFoodsDataUseCase.getSingleRecommendedFood(body);
-      print("getSingleRecommendedFood : ${result}");
+      print("getSingleRecommendedFood : ${result} ${state.previousAnswer}");
       result.fold(
         (failure) {
           // 실패 처리
@@ -76,19 +77,20 @@ class DailyFoodsCubit extends Cubit<DailyFoodsState> {
                 metaData: state.metaData,
                 rankedFoods: state.rankedFoods,
                 selectedFoodType: body,
-                // previousAnswer: [
-                //   ...(state.previousAnswer ?? []),
-                //   if (recommendedFoods.isNotEmpty) recommendedFoods[0].name,
-
-                // ]
                 previousAnswer: [
-                  (state?.previousAnswer?.isNotEmpty == true
-                          ? state!.previousAnswer![0] + ' '
-                          : '') +
-                      (recommendedFoods.isNotEmpty
-                          ? recommendedFoods[0].name
-                          : '')
-                ].where((s) => s.isNotEmpty).toList()));
+                  ...state.previousAnswer ?? [],
+                  recommendedFoods[0].name,
+                ]
+                // previousAnswer: [
+                //   (state?.previousAnswer?.isNotEmpty == true
+                //           ? state!.previousAnswer![0] + ' '
+                //           : '') +
+                //       (recommendedFoods.isNotEmpty
+                //           ? recommendedFoods[0].name
+                //           : '')
+                // ].where((s) => s.isNotEmpty).toList()
+
+                ));
           } else {
             emit(DailyFoodsError('No recommended food found'));
           }
